@@ -1,10 +1,10 @@
 from flask import jsonify
+from flask import Flask,render_template
 from app import app
- 
  
 @app.route('/')
 def home():
-    return "Flask says 'Hello world!'"
+    return "Boat says 'Hello world!'"
  
  
 @app.route('/phonebook')
@@ -21,3 +21,7 @@ def data():
         "Bob": "(305) 734-0429"
     }
     return jsonify(d)
+
+@app.route('/lab02')
+def resume():
+    return app.send_static_file('lab02_resume.html')
