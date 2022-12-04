@@ -5,14 +5,59 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="static/css/resume.css">
   <title>Original title</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
 </head>
 <body>
     <div class="sidebar">
-        <ul class="butttom">
-            <li class="profile"></li>
-            <li class="about-me"></li>
-            <li class=""></li>
-        </ul>
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="https://sv1.picz.in.th/images/2022/12/03/GAXjNv.jpg" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">I'm </span>
+                    <span class="name">Boat</span><br>
+                    <span class="profession">Web developer</span>
+                </div>
+            </div>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="list active"><a href="/app/static/Profile.html">
+                        <span class="icon">
+                            <i class="bi bi-person-fill"></i>
+                        </span>
+                        <span class="text-but">Profile</span>
+                        </a></li>
+                    <li class="list"><a href="#">
+                        <i class="bi bi-file-text icon"></i>
+                        <span class="text-but">Information</span>
+                        </a></li>
+                    <li class="list"><a href="#">
+                        <i class="bi bi-clipboard-check icon"></i>
+                        <span class="text-but">Hobbies</span>
+                        </a></li>
+                    <li class="list"><a href="#">
+                        <i class="bi bi-telephone-fill icon"></i>
+                        <span class="text-but">Contact</span>
+                        </a>
+                    </li>
+                    <div class="indicator">
+                    </div>
+                </ul>
+            </div>
+        </div>
     </div>
+    <script>
+        const list = document.querySelectorAll('.list');
+        function activeLink(){
+            list.forEach((item) => 
+            item.classList.remove('active'));
+            this.classList.add('active');
+        }
+        list.forEach((item) =>
+        item.addEventListener('click',activeLink));
+    </script>
 </body>
 </html>

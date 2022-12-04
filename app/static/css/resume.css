@@ -1,3 +1,158 @@
-body {
-    background-color: lightblue;
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+*{
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+:root{
+    --body-color: #E4E9F7;
+    --sidebar-color: #FFF;
+    --primary-color: #695CFE;
+    --primary-color-light: #F6F5FF;
+    --toggle-color: #DDD;
+    --text-color: #707070;
+}
+
+body {
+    background-color: #535353;
+}
+
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 300px;
+    padding: 10px 14px;
+    background: #fff;
+}
+
+.sidebar .image-text .image img{
+    height: 250px;
+    border-radius: 50%;
+}
+
+.sidebar .image-text .text span{
+    color: #535353;
+}
+
+.sidebar .image-text .text .name{
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.sidebar ul{
+    display: flex;
+    flex-direction: column;
+    width: 270px;
+    height: 500px;
+    align-items: center;
+
+}
+
+.sidebar ul li{
+    position: relative;
+    width: 300px;
+    height: 70px;
+    margin-top: 50px;
+    list-style: none;
+}
+
+.sidebar ul li a{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+}
+
+.sidebar li .icon{
+    position: relative;
+    display: block;
+    line-height: 75px;
+    font-size: 30px;
+    text-align: center;
+    transition: 0.5s;
+    color: #535353;
+}
+
+.sidebar ul li.active a .icon{
+    transform: translateX(160px);
+    color: #fff;
+}
+
+.sidebar ul li a .text-but{
+    position: absolute;
+    color: #535353;
+    font-weight: 500;
+    font-size: 25px;
+    letter-spacing: 0.05em;
+    transition: 0.5s;
+    opacity: 0;
+}
+
+.sidebar ul li.active a .text-but{
+    opacity: 1;
+}
+
+.indicator{
+    position: absolute;
+    top: 390px;
+    right: -35px;
+    width: 70px;
+    height: 70px;
+    background: #FF952B;
+    border-radius: 50%;
+    border: 6px solid #535353;
+    transition: 0.4s;
+}
+
+.indicator::before{
+    content: '';
+    position: absolute;
+    top: -22px;
+    left: 9px;
+    background: transparent;
+    width: 20px;
+    height: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 5px 3px 0 0 #535353;
+}
+
+.indicator::after{
+    content: '';
+    position: absolute;
+    top: 60px;
+    left: 9px;
+    background: transparent;
+    width: 20px;
+    height: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 5px -3px 0 0 #535353;
+}
+
+.sidebar ul li:nth-child(1).active ~ .indicator{
+    transform: translateY(calc(70px * 0));
+}
+
+.sidebar ul li:nth-child(2).active ~ .indicator{
+    transform: translateY(calc(120px * 1));
+}
+
+.sidebar ul li:nth-child(3).active ~ .indicator{
+    transform: translateY(calc(80px * 3));
+}
+
+.sidebar ul li:nth-child(4).active ~ .indicator{
+    transform: translateY(calc(90px * 4));
+}
+
