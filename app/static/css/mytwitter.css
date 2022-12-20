@@ -58,6 +58,17 @@ img.tw-user-medium {
     padding-right: 10px;
 }
 
-.pic-background{
-    width: 200px;
+img.pic-background{
+    max-width: 255px;
+}
+
+img.profile-pic{
+    border: 3px solid #0d0e20;
+    border-color: #ffffff;
+}
+
+.corner-back{
+    max-width: 255px;
+    max-height: 100px;
+    overflow: hidden;
 }
