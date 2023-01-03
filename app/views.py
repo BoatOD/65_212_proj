@@ -1,8 +1,7 @@
 import datetime
 from flask import (jsonify, render_template, 
                     request, url_for, flash, redirect)
-from flask import jsonify
-from flask import Flask, render_template
+from flask import Flask
 from app import app
 import json
 from forms import forms
@@ -102,3 +101,12 @@ def lab06_courses():
     raw_json = read_file('data/course_list.json')
     course_list = json.loads(raw_json)
     return render_template('lab06/courses.html', course_list=course_list)
+
+@app.route('/lab07')
+def lab07_form_validation():
+    return app.send_static_file('lab07_form_validation.html')
+
+
+@app.route('/lab07b')
+def lab07b():
+    return app.send_static_file('lab07b.html')
