@@ -1,21 +1,22 @@
 import datetime
-from flask import (jsonify, render_template, 
-                    request, url_for, flash, redirect)
+from flask import (jsonify, render_template,
+                   request, url_for, flash, redirect)
 from flask import Flask
 from app import app
 import json
 from forms import forms
- 
+
+
 @app.route('/')
 def home():
     return "Boat says 'Hello world!'"
- 
- 
+
+
 @app.route('/phonebook')
 def index():
     return app.send_static_file('phonebook.html')
- 
- 
+
+
 # This route serves the dictionary d at the route /api/data
 @app.route("/api/data")
 def data():
@@ -24,23 +25,27 @@ def data():
         "Alice": "(708) 727-2377",
         "Bob": "(305) 734-0429"
     }
- 
+
     app.logger.debug(str(len(d)) + " entries in phonebook")
- 
+
     return jsonify(d)  # convert your data to JSON and return
+
 
 @app.route('/lab02')
 def resume():
     return app.send_static_file('lab02_resume.html')
+
 
 @app.route('/lab03')
 def lab03_home():
     return render_template('lab03/index.html',
                            utc_dt=datetime.datetime.utcnow())
 
+
 @app.route('/lab03/about/')
 def lab03_about():
     return render_template('lab03/about.html')
+
 
 @app.route('/lab03/comments/')
 def lab03_comments():
@@ -48,25 +53,28 @@ def lab03_comments():
     messages = json.loads(raw_json)
     return render_template('lab03/comments.html', comments=messages)
 
+
 @app.route('/lab04')
 def lab04_bootstrap():
     return app.send_static_file('lab04_bootstrap.html')
 
+
 def read_file(filename, mode="rt"):
     with open(filename, mode, encoding='utf-8') as fin:
         return fin.read()
- 
- 
+
+
 def write_file(filename, contents, mode="wt"):
     with open(filename, mode, encoding="utf-8") as fout:
         fout.write(contents)
+
 
 @app.route('/lab03/create/', methods=('GET', 'POST'))
 def lab03_create():
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
- 
+
         if not title:
             flash('Title is required!')
         elif not content:
@@ -77,8 +85,9 @@ def lab03_create():
             messages.append({'title': title, 'content': content})
             write_file('data/messages.json', json.dumps(messages, indent=4))
             return redirect(url_for('lab03_comments'))
- 
+
     return render_template('lab03/create.html')
+
 
 @app.route('/lab06/', methods=('GET', 'POST'))
 def lab06_index():
@@ -96,11 +105,13 @@ def lab06_index():
         return redirect(url_for('lab06_courses'))
     return render_template('lab06/index.html', form=form)
 
+
 @app.route('/lab06/courses/')
 def lab06_courses():
     raw_json = read_file('data/course_list.json')
     course_list = json.loads(raw_json)
     return render_template('lab06/courses.html', course_list=course_list)
+
 
 @app.route('/lab07')
 def lab07_form_validation():
@@ -111,14 +122,56 @@ def lab07_form_validation():
 def lab07b():
     return app.send_static_file('lab07b.html')
 
+
 @app.route('/lab08c')
 def lab08c():
     return app.send_static_file('lab08c.html')
+
 
 @app.route('/lab08d')
 def lab08d():
     return app.send_static_file('lab08d.html')
 
+
 @app.route('/lab08e')
 def lab08e():
     return app.send_static_file('lab08e.html')
+
+@app.route('/lab09', methods=('GET', 'POST'))
+def lab09():
+    if request.method == 'POST':
+
+        result = request.form.to_dict()
+        app.logger.debug(str(result))
+
+        validated = True
+        valid_keys = ['firstname', 'lastname', 'phone',
+                      'postcode', 'subdist', 'district', 'province']
+        for key in result:
+            if key not in valid_keys:
+                continue
+            value = result[key].strip()
+            if not value or value == 'undefined':
+                validated = False
+            break
+
+        if validated:
+            contact_file = 'data/stored_contacts.json'
+            raw_json = read_file(contact_file)
+            contacts = json.loads(raw_json)
+            contacts.append(result)
+            write_file(contact_file, json.dumps(
+                contacts, indent=4, ensure_ascii=False))
+        return jsonify(contacts)
+
+    return app.send_static_file('lab09_address_book.html')
+
+@app.route("/lab09/contacts")
+def lab09_stored_contacts():
+    raw_json = read_file('data/stored_contacts.json')
+    contacts = json.loads(raw_json)
+
+    return jsonify(contacts)
+
+
+
