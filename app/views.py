@@ -137,6 +137,7 @@ def lab08d():
 def lab08e():
     return app.send_static_file('lab08e.html')
 
+
 @app.route('/lab09', methods=('GET', 'POST'))
 def lab09():
     if request.method == 'POST':
@@ -166,6 +167,7 @@ def lab09():
 
     return app.send_static_file('lab09_address_book.html')
 
+
 @app.route("/lab09/contacts")
 def lab09_stored_contacts():
     raw_json = read_file('data/stored_contacts.json')
@@ -174,4 +176,14 @@ def lab09_stored_contacts():
     return jsonify(contacts)
 
 
+@app.route("/lab09/subdist_list", methods=('GET', 'POST'))
+def lab09_query_subdist():
+    if request.method == 'GET':
+        app.logger.debug(request.args)
+        query = request.args.to_dict()
 
+        raw_json = read_file('data/post_code_cnx.json')
+        all_postcodes = json.loads(raw_json)
+
+        result = all_postcodes.get(query['postcode'], [])
+        return jsonify(result)

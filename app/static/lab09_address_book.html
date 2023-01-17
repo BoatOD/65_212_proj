@@ -38,14 +38,16 @@
                 <input type="text" id="postcode" name="postcode" placeholder="Your postcode.." required>
             </div>
             <label for="subdist">ตำบล/แขวง</label>
-            <input type="text" id="subdist" name="subdist" placeholder="Your subdistrict.." required>
+            <select class="greyed" id="subdist" name="subdist" disabled required>
+                <option value="">Please Select..</option>
+            </select>
             <div class=box1>
                 <label for="district">อำเภอ/เขต</label>
-                <input type="text" id="district" name="district" placeholder="Your district.." required>
+                <input type="text" id="district" name="district" placeholder="Your district.." disabled required>
             </div>
             <div class=box2>
                 <label for="province">จังหวัด</label>
-                <input type="text" id="province" name="province" placeholder="Your province.." required>
+                <input type="text" id="province" name="province" placeholder="Your province.." disabled required>
             </div>
             <input type="submit" name="submit" value="Submit">
         </form>
@@ -130,9 +132,35 @@
             $.post(url, formData, function (contact_data) {
                 refresh_table(contact_data);
                 $('#addContactForm')[0].reset();
+                $("#subdist").find('option').not(':first').remove();
+                $("select.greyed").prop('disabled', true);
             });
 
         });
+
+        $('input#postcode').change('input', function (e) {
+
+            var query = { postcode: $("#postcode").val() };
+            //console.log(query);
+            $.get("lab09/subdist_list", query, function (content) {
+                console.log(content)
+                $('#province').val('')
+                $('#district').val('')
+                $("#subdist").find('option').not(':first').remove();
+                $.each(content, function (i, p) {
+                    if (i == 0) {
+                        $('#province').val(p[0]);
+                        $('#district').val(p[1]);
+                    }
+                    $('#subdist').append($('<option></option>').val(p[2]).html(p[2]));
+
+                });
+                //$("input.greyed").prop('disabled', false);
+                $("select.greyed").prop('disabled', false);
+            });
+
+        });
+
 
     </script>
 </body>
