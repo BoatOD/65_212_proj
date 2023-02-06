@@ -1,9 +1,0 @@
-[
-    {
-        "title": "Python 101",
-        "description": "Learn Python basics",
-        "price": 345,
-        "available": true,
-        "level": "Beginner"
-    }
-]
