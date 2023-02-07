@@ -1,7 +1,8 @@
 from app import db
+from sqlalchemy_serializer import SerializerMixin
 
 
-class Contact(db.Model):
+class Contact(db.Model, SerializerMixin):
     __tablename__ = "contacts"
 
 
@@ -9,7 +10,7 @@ class Contact(db.Model):
     firstname = db.Column(db.String(50))
     lastname = db.Column(db.String(50))
     phone = db.Column(db.String(20))
-    
+
     def __init__(self, firstname, lastname, phone):
         self.firstname = firstname
         self.lastname = lastname
