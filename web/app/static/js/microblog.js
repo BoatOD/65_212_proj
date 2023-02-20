@@ -17,8 +17,8 @@ function refreshblog(formData) {
             '</p>' +
             '</div>' +
             '<div id="edit_remove">' +
-            // '<button id="edit" onclick="prePopulateForm()" class="' + formData[i].id +  + '" title="edit">✏️</button>' +
-            '<input type="button" class="'+ formData[i].id +' " value="🗑️" onclick="removeItem()">' +
+            '<input type="button"' + '" value="✏️" onclick="prePopulateForm('+ formData[i].id +')">'+
+            '<input type="button"' + '" value="🗑️" onclick="removeItem('+ formData[i].id +')">' +
             '</div>' +
             '</div>' +
             '</div>');
@@ -69,20 +69,27 @@ function clearForm() {
     $('#entryid').val('');
 }
 
-function prePopulateForm() {
+function prePopulateForm(id) {
     $('#addNewBlogForm')[0].reset();
+    $.getJSON("/lab11/microblogs", function( data ) {
+        
+    });
+    $('#name').val(data[id].name);
+    $('#message').val(data[id].message);
+    $('#email').val(data[id].email);
+    $('#entryid').val(id);
     toggleView()
 }
 
-function removeItem() {
+function removeItem(id) {
     if (!confirm("Delete " + '?')) {
         return false;
     }
 
     var url = "lab11/remove_content"
-    var formData = { 'id': 1 };
+    var formData = { 'id': id };
     $.post(url, formData, function (blogData) {
-        refresh_table(blogData);
+        refreshblog(blogData);
     });
 
     $("#").detach();
