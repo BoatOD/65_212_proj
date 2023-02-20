@@ -17,8 +17,8 @@ function refreshblog(formData) {
             '</p>' +
             '</div>' +
             '<div id="edit_remove">' +
-            '<input type="button"' + '" value="✏️" onclick="prePopulateForm(' + formData[i].id + ')">' +
-            '<input type="button"' + '" value="🗑️" onclick="removeItem(' + formData[i].id + ')">' +
+            '<input type="button" class="edit"' + '" value="✏️" onclick="prePopulateForm(' + formData[i].id + ')">' +
+            '<input type="button" class="remove"' + '" value="🗑️" onclick="removeItem(' + formData[i].id + ')">' +
             '</div>' +
             '</div>' +
             '</div>');

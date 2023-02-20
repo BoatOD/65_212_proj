@@ -95,3 +95,11 @@ input[type=submit]:hover {
 #edit_remove{
     margin-bottom: 10px;
 }
+
+.edit,.remove{
+    background-color: #9EFF65;
+    border: none;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+}
