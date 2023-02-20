@@ -18,7 +18,8 @@ img.tw-user-medium {
  
 #nav-search {
     border-radius: 20px;
-    background-color: #e7ecf0
+    background-color: #e7ecf0;
+    width: 60%;
 }
  
 #nav-tweet-btn {
@@ -27,10 +28,6 @@ img.tw-user-medium {
     color: #ffffff;
 }
 
-.content-box {
-    background-color: #ffffff;
-    margin-bottom: 10px;
-}
 
 .new-tweet-row {
     background-color: #eaf5fe;
@@ -39,10 +36,10 @@ img.tw-user-medium {
 }
 
 .tweet {
-    background-color: #ffffff;
     padding-top: 10px;
     padding-bottom: 10px;
     border-bottom: 1px solid #edf1f4;
+    border-radius: 10px;
 }
  
 .tweet-username {
@@ -72,3 +69,31 @@ img.profile-pic{
     max-height: 100px;
     overflow: hidden;
 }
+
+.tweetnew{
+    justify-content: center;
+}
+
+.content_cctv{
+    margin-left: 10px;
+}
+
+.contentnew{
+    align-items: center;
+    background-color: #ffffff;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    min-height: 120px;
+}
+
+#iconn{
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+/* #tweet-text{
+    background-color: rebeccapurple;
+    max-width: 100px;
+
+} */
