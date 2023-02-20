@@ -1,6 +1,6 @@
 function refreshblog(formData) {
     $(".contentnew").remove();
-    for (let i = 0 ; i < formData.length ; i++) {
+    for (let i = 0; i < formData.length; i++) {
         $("#tweet").prepend('<div class="row contentnew" id="' + formData[i].id + '">' +
             '<div class="col-md-11 content_cctv" id="content_cctv">' +
             '<div class="row tweet-info">' +
@@ -17,8 +17,8 @@ function refreshblog(formData) {
             '</p>' +
             '</div>' +
             '<div id="edit_remove">' +
-            '<input type="button"' + '" value="✏️" onclick="prePopulateForm('+ formData[i].id +')">'+
-            '<input type="button"' + '" value="🗑️" onclick="removeItem('+ formData[i].id +')">' +
+            '<input type="button"' + '" value="✏️" onclick="prePopulateForm(' + formData[i].id + ')">' +
+            '<input type="button"' + '" value="🗑️" onclick="removeItem(' + formData[i].id + ')">' +
             '</div>' +
             '</div>' +
             '</div>');
@@ -71,13 +71,19 @@ function clearForm() {
 
 function prePopulateForm(id) {
     $('#addNewBlogForm')[0].reset();
-    $.getJSON("/lab11/microblogs", function( data ) {
-        
+    $.getJSON("/lab11/microblogs", function (data) {
+        console.log(data);
+        var keyToFind = id;
+        for (var i in data) {
+            if (data[i].id == keyToFind) {
+                $('#name').val(data[i].name);
+                $('#message').val(data[i].message);
+                $('#email').val(data[i].email);
+                $('#entryid').val(id);
+                break;
+            }
+        }
     });
-    $('#name').val(data[id].name);
-    $('#message').val(data[id].message);
-    $('#email').val(data[id].email);
-    $('#entryid').val(id);
     toggleView()
 }
 
