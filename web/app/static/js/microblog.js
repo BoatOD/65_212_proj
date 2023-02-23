@@ -7,7 +7,7 @@ function refreshblog(formData) {
             '<div class="col-md-auto">' +
             '<img class="tw-user-medium rounded-circle" id="iconn" src="static/img/Nyan_cat.png">' +
             '<span class="tweet-username" id="tweet-username">' + formData[i].name + '</span>' +
-            '<span class="tweet-usertag text-muted" id="tweet-usertag"> @' + formData[i].email + '</span>' +
+            '<span class="tweet-usertag text-muted" id="tweet-usertag"> ' + formData[i].email + '</span>' +
             '<span class="tweet-age text-muted" id="tweet-age"> - ' + formData[i].date + '</span>' +
             '</div>' +
             '</div>' +
@@ -24,6 +24,7 @@ function refreshblog(formData) {
             '</div>');
     }
 }
+
 
 $(document).ready(function () {
     (function () {
@@ -57,7 +58,7 @@ $("#addNewBlogForm").submit(function (event) {
     // make a POST call to the back end w/ a callback to refresh the table
     $.post('/microblog', formData, function (blogData) {
         refreshblog(blogData)
-        clearForm();
+        clearForm_1();
     });
 
     toggleView();
@@ -67,6 +68,12 @@ $("#addNewBlogForm").submit(function (event) {
 function clearForm() {
     $('#addNewBlogForm')[0].reset();
     $('#entryid').val('');
+}
+
+function clearForm_1() {
+    $('#message').val('');
+    $('#entryid').val('');
+    $('#date').val('');
 }
 
 function prePopulateForm(id) {
@@ -112,7 +119,7 @@ function toggleView() {
 }
 
 $("#add_blog").click(function () {
-    clearForm();
+    clearForm_1();
     toggleView();
 });
 
@@ -121,6 +128,6 @@ $("#clear_form").click(function () {
 });
 
 $("#cancel_form").click(function () {
-    clearForm();
+    clearForm_1();
     toggleView();
 });
