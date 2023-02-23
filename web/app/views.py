@@ -1,11 +1,25 @@
 from flask import (jsonify, render_template,
                    request, url_for, flash, redirect)
+
+from werkzeug.security import check_password_hash
+from werkzeug.urls import url_parse
 import json
 from sqlalchemy.sql import text
+from flask_login import login_user
 from app import app
 from app import db
+from app import login_manager
 from app.models.contact import Contact
+from app.models.authuser import AuthUser
 from app.models.BlogEntry import BlogEntry
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    # since the user_id is just the primary key of our
+    # user table, use it in the query for the user
+    return AuthUser.query.get(int(user_id))
+
 
 @app.route('/')
 def home():
@@ -170,3 +184,47 @@ def lab11_remove_content():
             app.logger.debug(ex)
             raise
     return lab11_microblog_content()
+
+
+@app.route('/lab12')
+def lab12_index():
+   return 'Lab12'
+
+@app.route('/lab12/profile')
+def lab12_profile():
+   return 'Profile'
+
+@app.route('/lab12/login', methods=('GET', 'POST'))
+def lab12_login():
+    if request.method == 'POST':
+        # login code goes here
+        email = request.form.get('email')
+        password = request.form.get('password')
+        remember = bool(request.form.get('remember'))
+
+        user = AuthUser.query.filter_by(email=email).first()
+ 
+        # check if the user actually exists
+        # take the user-supplied password, hash it, and compare it to the
+        # hashed password in the database
+        if not user or not check_password_hash(user.password, password):
+            flash('Please check your login details and try again.')
+            # if the user doesn't exist or password is wrong, reload the page
+            return redirect(url_for('lab12_login'))
+
+        # if the above check passes, then we know the user has the right
+        # credentials
+        login_user(user, remember=remember)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('lab12_profile')
+        return redirect(next_page)
+    return render_template('lab12/login.html')
+
+@app.route('/lab12/signup')
+def lab12_signup():
+   return render_template('lab12/signup.html')
+
+@ app.route('/lab12/logout')
+def lab12_logout():
+   return 'Logout'
