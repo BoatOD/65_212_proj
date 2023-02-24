@@ -1,5 +1,7 @@
 from flask_login import UserMixin
+from sqlalchemy_serializer import SerializerMixin
 from app import db
+from .contact import Contact
 
 class AuthUser(db.Model, UserMixin):
     __tablename__ = "auth_users"
@@ -15,3 +17,10 @@ class AuthUser(db.Model, UserMixin):
         self.name = name
         self.password = password
         self.avatar_url = avatar_url
+
+class PrivateContact(Contact, UserMixin, SerializerMixin):
+    owner_id = db.Column(db.Integer, db.ForeignKey('auth_users.id'))
+
+    def __init__(self, firstname, lastname, phone, owner_id):
+        super().__init__(firstname, lastname, phone)
+        self.owner_id = owner_id

@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash
 from app import app, db
 from app.models.contact import Contact
 from app.models.BlogEntry import BlogEntry
-from app.models.authuser import AuthUser
+from app.models.authuser import AuthUser, PrivateContact
 
 cli = FlaskGroup(app)
 
@@ -19,9 +19,13 @@ def seed_db():
         Contact(firstname='สมชาย', lastname='ทรงแบด', phone='081-111-1111'))
     db.session.add(
         BlogEntry(name='Tanachoh Vattanashusagul', message='LOL', email='saoraza1234@gmail.com', date='20/2/2566 16:56:47'))
-    db.session.add(AuthUser(email="flask@204212", name='สมชาย ทรงแบด',
-                            password=generate_password_hash('1234',method='sha256'),
-                            avatar_url='https://ui-avatars.com/api/?name=\สมชาย+ทรงแบด&background=83ee03&color=fff'))
+    db.session.add(
+        AuthUser(email="flask@204212", name='สมชาย ทรงแบด',
+                password=generate_password_hash('1234',method='sha256'),
+                avatar_url='https://ui-avatars.com/api/?name=\สมชาย+ทรงแบด&background=83ee03&color=fff'))
+    db.session.add(
+       PrivateContact(firstname='ส้มโอ', lastname='โอเค',
+                      phone='081-111-1112', owner_id=1))
     db.session.commit()
 
 if __name__ == "__main__":
