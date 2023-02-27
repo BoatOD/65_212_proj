@@ -78,9 +78,10 @@ input[type=submit]:hover {
 
 #add-edit{
     margin-bottom: 10px;
+    margin-top: 20px;
     padding-top: 10px;
     background-color: #ffffff;
-    min-height: 400px;
+    min-height: 210px;
     border-radius: 10px;
 }
 
@@ -90,6 +91,7 @@ input[type=submit]:hover {
 
 #add_blog{
     margin-bottom: 10px;
+    margin-top: 20px;
 }
 
 #edit_remove{
@@ -103,3 +105,29 @@ input[type=submit]:hover {
     height: 50px;
     width: 50px;
 }
+
+/* .login-signup-bottom{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    background-color: #9EFF65;
+}
+
+.login-signup{
+    width: 100px;
+    margin-right: 10px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    background-color: #67b1f9;
+    color: #ffffff;
+}
+
+.login-signup #login-bottom{
+    padding-left: 30px;
+}
+
+.login-signup #signup-bottom{
+    padding-left: 30px;
+} */

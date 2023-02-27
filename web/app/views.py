@@ -11,11 +11,9 @@ from app import app
 from app import db
 from app import login_manager
 
-
 from app.models.contact import Contact
 from app.models.authuser import AuthUser, PrivateContact
 from app.models.BlogEntry import BlogEntry
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -46,6 +44,7 @@ def lab04_bootstrap():
     return app.send_static_file('lab04_bootstrap.html')
 
 @app.route('/lab10', methods=('GET', 'POST'))
+@login_required
 def lab10_phonebook():
     if request.method == 'POST':
         result = request.form.to_dict()
@@ -90,7 +89,7 @@ def lab10_phonebook():
             db.session.commit()
 
         return lab10_db_contacts()
-    return render_template('lab10_phonebook.html')
+    return render_template('lab12/lab10_phonebook.html')
 
 @app.route("/lab10/contacts")
 @login_required
@@ -110,21 +109,24 @@ def lab10_remove_contacts():
     if request.method == 'POST':
         result = request.form.to_dict()
         id_ = result.get('id', '')
-        try:
-            contact = Contact.query.get(id_)
-            db.session.delete(contact)
-            db.session.commit()
-        except Exception as ex:
-            app.logger.debug(ex)
-            raise
+        contact = PrivateContact.query.get(id_)
+        if contact.owner_id == current_user.id:
+            try:
+                contact = Contact.query.get(id_)
+                db.session.delete(contact)
+                db.session.commit()
+            except Exception as ex:
+                app.logger.debug(ex)
+                raise
     return lab10_db_contacts()
 
 @app.route('/lab11', methods=('GET', 'POST'))
 def lab11_microblog():
     posts = BlogEntry.query.all()
-    return render_template('lab11_microblog.html', posts=posts)
+    return render_template('lab12/lab11_microblog.html', posts=posts)
 
 @app.route('/microblog', methods=('GET', 'POST'))
+@login_required
 def microblog():
     if request.method == 'POST':
         result = request.form.to_dict()
@@ -132,7 +134,7 @@ def microblog():
         id_ = result.get('id', '')
         validated = True
         validated_dict = dict()
-        valid_keys = ['name', 'message', 'email' , 'date']
+        valid_keys = ['name', 'message', 'email' , 'date', 'avatar_url']
 
 
         # validate the input
@@ -148,11 +150,11 @@ def microblog():
                 validated = False
                 break
             validated_dict[key] = value
-
+            
 
         if validated:
             app.logger.debug('validated dict: ' + str(validated_dict))
-            # if there is no id: create a new contact entry
+            # if there is no id: create a new contact entry.
             if not id_:
                 entry = BlogEntry(**validated_dict)
                 app.logger.debug(str(entry))
@@ -160,7 +162,8 @@ def microblog():
             # if there is an id already: update the contact entry
             else:
                 blogentry = BlogEntry.query.get(id_)
-                blogentry.update(**validated_dict)
+                if blogentry.email == current_user.email:
+                    blogentry.update(**validated_dict)
             db.session.commit()
             return lab11_microblog_content()
         return redirect(url_for("lab11_microblog"))
@@ -176,6 +179,7 @@ def lab11_microblog_content():
     return jsonify(microblogs)
 
 @app.route('/lab11/remove_content', methods=('GET', 'POST'))
+@login_required
 def lab11_remove_content():
     app.logger.debug("LAB11 - REMOVE")
     if request.method == 'POST':
@@ -183,8 +187,9 @@ def lab11_remove_content():
         id_ = result.get('id', '')
         try:
             microblogs = BlogEntry.query.get(id_)
-            db.session.delete(microblogs)
-            db.session.commit()
+            if microblogs.email == current_user.email:
+                db.session.delete(microblogs)
+                db.session.commit()
         except Exception as ex:
             app.logger.debug(ex)
             raise
@@ -195,9 +200,63 @@ def lab11_remove_content():
 def lab12_index():
    return render_template('lab12/index.html')
 
-@app.route('/lab12/profile')
+@app.route('/lab12/profile', methods=('GET', 'POST'))
 @login_required
 def lab12_profile():
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        app.logger.debug(str(result))
+ 
+        validated = True
+        validated_dict = {}
+        valid_keys = ['email', 'name' , 'email_old']
+
+
+        # validate the input
+        for key in result:
+            app.logger.debug(str(key)+": " + str(result[key]))
+            # screen of unrelated inputs
+            if key not in valid_keys:
+                continue
+
+
+            value = result[key].strip()
+            if not value or value == 'undefined':
+                validated = False
+                break
+            validated_dict[key] = value
+            # code to validate and add user to database goes here
+        app.logger.debug("validation done")
+        if validated:
+            app.logger.debug('validated dict: ' + str(validated_dict))
+            email_old = validated_dict['email_old']
+            email = validated_dict['email']
+            name = validated_dict['name']
+            # if this returns a user, then the email already exists in database
+            user = AuthUser.query.filter_by(email=email).first()
+
+            if user:
+                # if a user is found, we want to redirect back to signup
+                # page so user can try again
+                flash('Email address already exists')
+                return redirect(url_for('lab12_profile'))
+
+            # update User
+            user = AuthUser.query.filter_by(email=email_old).first()
+            app.logger.debug("preparing to add")
+            avatar_url = gen_avatar_url(email, name)
+            updatedict = {'email':email , 'name':name , 'avatar_url':avatar_url}
+            user.update(**updatedict)
+            
+            # update Blog
+            blogentry = BlogEntry.query.filter_by(email=email_old).all()
+            for i in blogentry:
+                updatedict_blog = {'name':name , 'message':i.message , 'email':email, 'date':i.date , 'avatar_url':avatar_url }
+                i.update(**updatedict_blog)
+
+            #commit
+            db.session.commit()
+        return redirect(url_for('lab12_profile'))
     return render_template('lab12/profile.html')
 
 @app.route('/lab12/login', methods=('GET', 'POST'))
@@ -229,8 +288,6 @@ def lab12_login():
 
 @app.route('/lab12/signup', methods=('GET', 'POST'))
 def lab12_signup():
-
-
     if request.method == 'POST':
         result = request.form.to_dict()
         app.logger.debug(str(result))
@@ -286,9 +343,6 @@ def lab12_signup():
 
         return redirect(url_for('lab12_login'))
     return render_template('lab12/signup.html')
-
-
-
 
 def gen_avatar_url(email, name):
     bgcolor = generate_password_hash(email, method='sha256')[-6:]

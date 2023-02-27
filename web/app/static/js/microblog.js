@@ -1,27 +1,51 @@
 function refreshblog(formData) {
     $(".contentnew").remove();
+    // $("#tweet").prepend("")
+    var check = document.getElementsByClassName('emp')[0].id;
     for (let i = 0; i < formData.length; i++) {
-        $("#tweet").prepend('<div class="row contentnew" id="' + formData[i].id + '">' +
-            '<div class="col-md-11 content_cctv" id="content_cctv">' +
-            '<div class="row tweet-info">' +
-            '<div class="col-md-auto">' +
-            '<img class="tw-user-medium rounded-circle" id="iconn" src="static/img/Nyan_cat.png">' +
-            '<span class="tweet-username" id="tweet-username">' + formData[i].name + '</span>' +
-            '<span class="tweet-usertag text-muted" id="tweet-usertag"> ' + formData[i].email + '</span>' +
-            '<span class="tweet-age text-muted" id="tweet-age"> - ' + formData[i].date + '</span>' +
-            '</div>' +
-            '</div>' +
-            '<div>' +
-            '<p id="tweet-text">' +
-            formData[i].message +
-            '</p>' +
-            '</div>' +
-            '<div id="edit_remove">' +
-            '<input type="button" class="edit"' + '" value="✏️" onclick="prePopulateForm(' + formData[i].id + ')">' +
-            '<input type="button" class="remove"' + '" value="🗑️" onclick="removeItem(' + formData[i].id + ')">' +
-            '</div>' +
-            '</div>' +
-            '</div>');
+        if (check == formData[i].email) {
+            $("#tweet").prepend('<div class="row contentnew" id="' + formData[i].id + '">' +
+                '<div class="col-md-11 content_cctv" id="content_cctv">' +
+                '<div class="row tweet-info">' +
+                '<div class="col-md-auto">' +
+                '<img class="tw-user-medium rounded-circle" id="iconn" src="'+ formData[i].avatar_url +'">' +
+                '<span class="tweet-username textt" id="tweet-username">' + formData[i].name + '</span>' +
+                '<span class="tweet-usertag text-muted textt" id="tweet-usertag"> ' + formData[i].email + '</span>' +
+                '<span class="tweet-age text-muted textt" id="tweet-age"> - ' + formData[i].date + '</span>' +
+                '</div>' +
+                '</div>' +
+                '<div>' +
+                '<p id="tweet-text" class="textt">' +
+                formData[i].message +
+                '</p>' +
+                '</div>' +
+                '<div id="edit_remove">' +
+                '<input type="button" class="edit"' + '" value="✏️" onclick="prePopulateForm(' + formData[i].id + ')">' +
+                '<input type="button" class="remove"' + '" value="🗑️" onclick="removeItem(' + formData[i].id + ')">' +
+                '</div>' +
+                '</div>' +
+                '</div>');
+        } else {
+            $("#tweet").prepend('<div class="row contentnew" id="' + formData[i].id + '">' +
+                '<div class="col-md-11 content_cctv" id="content_cctv">' +
+                '<div class="row tweet-info">' +
+                '<div class="col-md-auto">' +
+                '<img class="tw-user-medium rounded-circle" id="iconn" src="'+ formData[i].avatar_url +'">' +
+                '<span class="tweet-username textt" id="tweet-username">' + formData[i].name + '</span>' +
+                '<span class="tweet-usertag text-muted textt" id="tweet-usertag"> ' + formData[i].email + '</span>' +
+                '<span class="tweet-age text-muted textt" id="tweet-age"> - ' + formData[i].date + '</span>' +
+                '</div>' +
+                '</div>' +
+                '<div>' +
+                '<p id="tweet-text" class="textt">' +
+                formData[i].message +
+                '</p>' +
+                '</div>' +
+                '<div id="edit_remove">' +
+                '</div>' +
+                '</div>' +
+                '</div>');
+        }
     }
 }
 
@@ -130,4 +154,9 @@ $("#clear_form").click(function () {
 $("#cancel_form").click(function () {
     clearForm_1();
     toggleView();
+});
+
+$("#logout").click(function () {
+    clearForm();
+    window.location.href = "lab12/logout";
 });

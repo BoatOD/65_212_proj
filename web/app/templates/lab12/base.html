@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html>
 
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Lab 12: Flask Login</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
 </head>
-
 
 <body>
   <section class="hero is-primary is-fullheight">
@@ -36,6 +34,9 @@
                 Phonebook
               </a>
               {% endif %}
+              <a href="{{ url_for('lab11_microblog') }}" class="navbar-item">
+                Microblog
+              </a>
             </div>
             <div class="navbar-end">
               {% if not current_user.is_authenticated %}

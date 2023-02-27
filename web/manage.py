@@ -18,14 +18,12 @@ def seed_db():
     db.session.add(
         Contact(firstname='สมชาย', lastname='ทรงแบด', phone='081-111-1111'))
     db.session.add(
-        BlogEntry(name='Tanachoh Vattanashusagul', message='LOL', email='saoraza1234@gmail.com', date='20/2/2566 16:56:47'))
+        BlogEntry(name='Tanachoh Vattanashusagul', message='LOL', email='saoraza1234@gmail.com', date='20/2/2566 16:56:47', avatar_url='https://ui-avatars.com/api/?name=T+&background=4afabf&color=b50540'))
     db.session.add(
-        AuthUser(email="flask@204212", name='สมชาย ทรงแบด',
-                password=generate_password_hash('1234',method='sha256'),
+        AuthUser(email="flask@204212", name='สมชาย ทรงแบด',password=generate_password_hash('1234',method='sha256'),
                 avatar_url='https://ui-avatars.com/api/?name=\สมชาย+ทรงแบด&background=83ee03&color=fff'))
     db.session.add(
-       PrivateContact(firstname='ส้มโอ', lastname='โอเค',
-                      phone='081-111-1112', owner_id=1))
+       PrivateContact(firstname='ส้มโอ', lastname='โอเค', phone='081-111-1112', owner_id=1))
     db.session.commit()
 
 if __name__ == "__main__":

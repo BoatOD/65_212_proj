@@ -3,4 +3,34 @@
 <h1 class="title">
   Welcome, {{ current_user.name }}!!
 </h1>
+<div class="column is-4 is-offset-4">
+  <h3 class="title">Change Profile</h3>
+  <div class="box">
+    <!-- {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="notification is-danger">
+      {{ messages[0] }}. Go to <a href="{{ url_for('lab12_profile') }}">login page</a>.
+    </div>
+    {% endif %}
+    {% endwith %} -->
+    <form method="POST">
+      <div class="field">
+        <div class="control">
+          <input class="input is-large" type="email" name="email" value="{{ current_user.email }}" placeholder="Email" autofocus="">
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <input class="input is-large" type="text" name="name" value="{{ current_user.name }}" placeholder="Name" autofocus="">
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <input class="input is-large" type="hidden" name="email_old" value="{{ current_user.email }}" autofocus="">
+        </div>
+      </div>
+      <button class="button is-block is-info is-large is-fullwidth">Change Profile</button>
+    </form>
+  </div>
+</div>
 {% endblock %}
