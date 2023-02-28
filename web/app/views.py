@@ -206,11 +206,15 @@ def lab12_profile():
     if request.method == 'POST':
         result = request.form.to_dict()
         app.logger.debug(str(result))
- 
+        password = result.get('password', '')
         validated = True
         validated_dict = {}
         valid_keys = ['email', 'name' , 'email_old']
 
+        if password == '':
+            flash('Please enter a password')
+            return redirect(url_for('lab12_profile'))
+            
 
         # validate the input
         for key in result:
@@ -232,9 +236,14 @@ def lab12_profile():
             email_old = validated_dict['email_old']
             email = validated_dict['email']
             name = validated_dict['name']
-            # if this returns a user, then the email already exists in database
-            user = AuthUser.query.filter_by(email=email).first()
+            
+            user = AuthUser.query.filter_by(email=email_old).first()
+            if not check_password_hash(user.password, password):
+                flash('Password incorrect')
+                return redirect(url_for('lab12_profile'))
+            
 
+            # if this returns a user, then the email already exists in database
             if user:
                 # if a user is found, we want to redirect back to signup
                 # page so user can try again
