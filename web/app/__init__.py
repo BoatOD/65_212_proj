@@ -4,7 +4,9 @@ from werkzeug.debug import DebuggedApplication
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
+
 app = Flask(__name__, static_folder='static')
+
 
 
 # this DEBUG config here will be overridden by FLASK_DEBUG shell environment

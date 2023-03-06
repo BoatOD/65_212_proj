@@ -1,5 +1,5 @@
-from flask import (jsonify, render_template,
-                  request, url_for, flash, redirect)
+import os
+from flask import (jsonify, render_template, request, url_for, flash, redirect)
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
 from sqlalchemy.sql import text
@@ -17,16 +17,42 @@ from app.models.BlogEntry import BlogEntry
 from app.models.problems import problems
 from app.models.review import review
 
+import pathlib
+import requests
+from flask import session, abort
+from google.oauth2 import id_token
+from pip._vendor import cachecontrol
+import google.auth.transport.requests
+from google_auth_oauthlib.flow import Flow
+
+#it is necessary to set a password when dealing with OAuth 2.0
+app.secret_key = "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"
+#this is to set our environment to https because OAuth 2.0 only supports https environments
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+#enter your client id you got from Google console
+GOOGLE_CLIENT_ID = "195457431286-f481mt0lnvbenm0epu0a2jpkoarc808r.apps.googleusercontent.com"
+#set the path to where the .json file you got Google console is
+client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
+
+flow = Flow.from_client_secrets_file(
+    #Flow is OAuth 2.0 a class that stores all the information on how we want to authorize our users
+    client_secrets_file=client_secrets_file,
+    #here we are specifing what do we get after the authorization
+    scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
+    #and the redirect URI is the point where the user will end up after the authorization
+    redirect_uri="http://localhost:56733/callback"
+)
+
 @login_manager.user_loader
 def load_user(user_id):
     # since the user_id is just the primary key of our
     # user table, use it in the query for the user
     return AuthUser.query.get(int(user_id))
 
-
-@app.route('/')
-def home():
-    return "Flask says 'Hello world!'"
+# @app.route('/')
+# def home():
+#     return "Flask says 'Hello world!'"
 
 @app.route('/crash')
 def crash():
@@ -381,3 +407,64 @@ def lab12_logout():
 def project_index():
    maps = review.query.all()
    return render_template('project_flask/index.html',maps=maps)
+
+
+def login_is_required(function):  #a function to check if the user is authorized or not
+    def wrapper(*args, **kwargs):
+        if "google_id" not in session:  #authorization required
+            return abort(401)
+        else:
+            return function()
+
+    return wrapper
+
+
+@app.route("/login")  #the page where the user can login
+def login():
+    authorization_url, state = flow.authorization_url()  #asking the flow class for the authorization (login) url
+    session["state"] = state
+    return redirect(authorization_url)
+
+
+@app.route("/callback")  #this is the page that will handle the callback process meaning process after the authorization
+def callback():
+    flow.fetch_token(authorization_response=request.url)
+
+    if not session["state"] == request.args["state"]:
+        abort(500)  #state does not match!
+
+    credentials = flow.credentials
+    request_session = requests.session()
+    cached_session = cachecontrol.CacheControl(request_session)
+    token_request = google.auth.transport.requests.Request(session=cached_session)
+
+    id_info = id_token.verify_oauth2_token(
+        id_token=credentials._id_token,
+        request=token_request,
+        audience=GOOGLE_CLIENT_ID
+    )
+
+    session["google_id"] = id_info.get("sub")  #defing the results to show on the page
+    session["name"] = id_info.get("name")
+    return redirect("/protected_area")  #the final page where the authorized users will end up
+
+
+@app.route("/logout")  #the logout page and function
+def logout():
+    session.clear()
+    return redirect("/")
+
+
+@app.route("/")  #the home page where the login button will be located
+def index():
+    return "Hello World <a href='/login'><button>Login</button></a>"
+
+
+@app.route("/protected_area")  #the page where only the authorized users can go to
+@login_is_required
+def protected_area():
+    return f"Hello {session['name']}! <br/> <a href='/logout'><button>Logout</button></a>"  #the logout button 
+
+
+if __name__ == "__main__":  #and the final closing function
+    app.run(debug=True)

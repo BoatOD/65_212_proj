@@ -1,16 +1,25 @@
 {% extends "project_flask/base.html" %}
 {% block content %}
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
-    type="text/javascript"></script>
-
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&libraries=drawing" type="text/javascript"></script>
 <script type="text/javascript">
+    var map;
+    var mapcanvas;
+
     function initMap() {
-        new google.maps.Map(document.getElementById('map'), {center: { lat: {{ maps.lat }} , lng: {{ maps.rot }}} , zoom: 16});
+        var location = new google.maps.Latlng(18.806615,98.952398);
+        mapOption ={
+            zoom:12,
+            center:location,
+            mapTypeId:google.maps.MapTypeId.RoadMap;
         }
+        map = new google.maps.Map(document.getElementById('map'),mapOption)
+    }
 </script>
 
 <div class="container">
-    <h1>{{maps.name}} School</h1>
-    <div id="map" style="width:100%; height:500px;"></div>
+    <h1>School</h1>
+    <div id="map" style="width:100%; height:500px;" onload="initMap()"></div>
 </div>
+
+
 {% endblock %}
