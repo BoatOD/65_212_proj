@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <!-- our own css -->
+    <link type="text/css" rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Kanit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../../static/css/mytwitter.css">
+    <link rel="stylesheet" href="../../static/css/open-iconic-bootstrap.css">
+    <link rel="stylesheet" href="../../static/css/microblog.css">
+    <link rel="stylesheet" href="../../static/css/sidebar.css">
+</head>
+
+<body>
+    <!-- <nav class="navbar navbar-expand-md navbar-light" id="barr">
+        <div class="container">
+            <div class="navbar-nav">
+                <h4 class="myaccount">Microblog</h2>
+            </div>
+            {% if current_user.is_authenticated %}
+            <div class="box3">
+                <img id="user-pic" class="tw-user-small rounded-circle" src="{{ current_user.avatar_url }}"> &nbsp;
+                <button id="logout" type="button">Logout</button>
+            </div>
+            {% else %}
+            <div class="login-signup-bottom">
+                <a class="login-signup" href="http://localhost:56733/lab12/login">
+                    <span id="login-bottom">Login</span>
+                </a>
+                <a class="login-signup" href="http://localhost:56733/lab12/signup">
+                    <span id="signup-bottom">Signup</span>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </nav> -->
+    <div class="container">
+        <div class="row">
+            <nav class="sidebar close col">
+                <header>
+                    <div class="image-text">
+                        {% if current_user.is_authenticated %}
+                        <span class="image">
+                            <img src="{{ current_user.avatar_url }}" alt="logo">
+                        </span>
+                        <div class="text header-text">
+                            <span class="name">{{ current_user.name }}</span>
+                            <span class="profession">Flask App</span>
+                        </div>
+                        {% else %}
+                        <span class="image">
+                            <img src="../../static/img/png-transparent-flask-python-bottle-web-framework-web-application-flask-white-monochrome-shoe.png" alt="logo">
+                        </span>
+                        <div class="text header-text">
+                            <span class="name">Hello!! new user</span>
+                            <span class="name">Flask App</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <i class='bx bx-chevron-right toggle'></i>
+                </header>
+                <div class="menu-bar">
+                    <div class="menu">
+                        <ul class="menu-links">
+                            <li class="side-link">
+                                <a href="http://localhost:56733/lab12">
+                                    <i class='bx bx-home-alt icon'></i>
+                                    <span class="text nav-text">Home</span>
+                                </a>
+                            </li>
+                            <li class="side-link">
+                                <a href="http://localhost:56733/lab12/profile">
+                                    <i class='bx bxs-user-account icon'></i>
+                                    <span class="text nav-text">Profile</span>
+                                </a>
+                            </li>
+                            <li class="side-link">
+                                <a href="http://localhost:56733/lab10">
+                                    <i class='bx bx-phone icon'></i>
+                                    <span class="text nav-text">Phonebook</span>
+                                </a>
+                            </li>
+                            <li class="side-link active">
+                                <a href="http://localhost:56733/lab11">
+                                    <i class='bx bxl-blogger icon'></i>
+                                    <span class="text nav-text">Blog</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bottom-content">
+                        <li class="">
+                            {% if current_user.is_authenticated %}
+                            <a href="#" id="logout">
+                                <i class='bx bx-log-out icon'></i>
+                                <span class="text nav-text">Logout</span>
+                            </a>
+                            {% else %}
+                            <a href="http://localhost:56733/lab12/login">
+                                <i class='bx bx-log-out icon'></i>
+                                <span class="text nav-text">login</span>
+                            </a>
+                            {% endif %}
+                        </li>
+
+                        <li class="mode">
+                            <div class="moon-sun">
+                                <i class='bx bx-moon icon moon'></i>
+                                <i class='bx bx-sun icon sun'></i>
+                            </div>
+
+                            <span class="mode-text text">Dark Mode</span>
+
+                            <div class="toggle-switch" onclick="darkMode()">
+                                <span class="switch"></span>
+                            </div>
+                        </li>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="row tweetnew col">
+                {% if current_user.is_authenticated %}
+                <div id="add-edit" class="container" hidden="hidden">
+                    <h2 id="add-edit-caption" class="textt">Tweet New Post:</h2>
+                    <form id="addNewBlogForm">
+                        <!-- <label for="name">ชื่อ</label> -->
+                        <!-- <input type="text" id="name" name="name" value="{{ current_user.name }}" required> -->
+                        <input type="hidden" id="name" name="name" value="{{ current_user.name }}">
+                        <label class="textt" for="message">message</label>
+                        <input type="text" id="message" name="message" placeholder="Your message.." required>
+                        <!-- <label for="email">email</label> -->
+                        <!-- <input type="email" id="email" name="email" placeholder="Your email.." required> -->
+                        <input type="hidden" id="email" name="email" value="{{ current_user.email }}">
+                        <input type="hidden" id="entryid" name="id" value="">
+                        <input type="hidden" id="date" name="date" value="">
+                        <input type="hidden" id="avatar_url" name="avatar_url" value="{{ current_user.avatar_url }}">
+                        <input type="submit" name="submit" value="Submit">
+                        <button class="textt" id="clear_form" type="button">Clear</button>
+                        <button class="textt" id="cancel_form" type="button">Cancel</button>
+                    </form>
+                </div>
+                <div id="blog_display">
+                    <button class="textt" id="add_blog" type="button">Tweet</button>
+                </div>
+                {% endif %}
+                <div class="container">
+                    <div class="content-box" id="content-box">
+                        <div class="tweet" id="tweet">
+                            <div class="row contentnew" id="testttt">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="emp" id="{{ current_user.email }}" hidden="hidden">
+    </div>
+    <script src="../../static/js/microblog.js"></script>
+    <script src="../../static/js/sidebar.js"></script>
+</body>
+
+</html>

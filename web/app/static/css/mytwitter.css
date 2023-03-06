@@ -1,0 +1,83 @@
+/* nav {
+    background-color: #ffffff;
+    border-bottom: 1px solid #adb1b4;
+    margin-bottom: 10px;
+} */
+
+img.tw-user-small {
+    height: 40px;
+}
+ 
+img.tw-user-medium {
+    height: 50px;
+}
+ 
+/* #nav-search {
+    border-radius: 20px;
+    background-color: #e7ecf0;
+    width: 60%;
+} */
+ 
+/* #nav-tweet-btn {
+    border-radius: 20px;
+    background-color: #67b1f9;
+    color: #ffffff;
+} */
+
+
+.new-tweet-row {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.tweet {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+}
+ 
+.tweet-username {
+    font-weight: bold;
+}
+ 
+.tweet-arrow {
+    padding-right: 25px;
+}
+ 
+.tweet-text,
+.tweet-media {
+    padding-right: 10px;
+}
+
+img.pic-background{
+    max-width: 255px;
+}
+
+.corner-back{
+    max-width: 255px;
+    max-height: 100px;
+    overflow: hidden;
+}
+
+.tweetnew{
+    justify-content: center;
+}
+
+.content_cctv{
+    margin-left: 10px;
+}
+
+.contentnew{
+    align-items: center;
+    margin-bottom: 10px;
+    margin-left: 15px;
+    border-radius: 10px;
+    min-height: 120px;
+    width: 100%;
+}
+
+#iconn{
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
