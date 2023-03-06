@@ -1,25 +1,12 @@
 {% extends "project_flask/base.html" %}
 {% block content %}
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&libraries=drawing" type="text/javascript"></script>
-<script type="text/javascript">
-    var map;
-    var mapcanvas;
-
-    function initMap() {
-        var location = new google.maps.Latlng(18.806615,98.952398);
-        mapOption ={
-            zoom:12,
-            center:location,
-            mapTypeId:google.maps.MapTypeId.RoadMap;
-        }
-        map = new google.maps.Map(document.getElementById('map'),mapOption)
-    }
-</script>
-
-<div class="container">
-    <h1>School</h1>
-    <div id="map" style="width:100%; height:500px;" onload="initMap()"></div>
-</div>
-
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAF8gNw7piHZpeLTu5UzZgkvMxsJpEybY0&sensor=false&libraries=places&signature=C-qIw8qLTHPAr_Mb_Bb7tFoiTFE="></script>
+<script type="text/javascript" src="https://rawgit.com/Logicify/jquery-locationpicker-plugin/master/dist/locationpicker.jquery.js"></script>
+<script src="../../static/js/map.js"></script>
+Location: <input type="text" id="location" style="width: 200px"/>
+Lat <input type="text" id="lat" style="width: 200px"/>
+Long: <input type="text" id="lng" style="width: 200px"/>
+<div id="us2" style="width: 500px; height: 400px;"></div>
 
 {% endblock %}
