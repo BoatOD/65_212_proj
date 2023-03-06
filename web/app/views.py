@@ -14,6 +14,8 @@ from app import login_manager
 from app.models.contact import Contact
 from app.models.authuser import AuthUser, PrivateContact
 from app.models.BlogEntry import BlogEntry
+from app.models.problems import problems
+from app.models.review import review
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -374,3 +376,8 @@ def gen_avatar_url(email, name):
 def lab12_logout():
     logout_user()
     return redirect(url_for('lab12_index'))
+
+@app.route('/project')
+def project_index():
+   maps = review.query.all()
+   return render_template('project_flask/index.html',maps=maps)
