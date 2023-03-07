@@ -1,99 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lab 12: Flask Login</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nav2</title>
+  <link rel="stylesheet" href="../../static/css/base.css">
 </head>
 
 <body>
-  <section class="hero is-primary is-fullheight">
-    <div class="hero-head">
-      <nav class="navbar">
-        <div class="container ">
-          <div class="navbar-brand">
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-              data-target="navbarMenuHeroA">
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-            </a>
-          </div>
-          <div id="navbarMenuHeroA" class="navbar-menu">
-            <div class="navbar-start">
-              <a href="{{ url_for('lab12_index') }}" class="navbar-item">
-                Home
-              </a>
-              {% if current_user.is_authenticated %}
-              <a href="{{ url_for('lab12_profile') }}" class="navbar-item">
-                Profile
-              </a>
-              <a href="{{ url_for('lab10_phonebook') }}" class="navbar-item">
-                Phonebook
-              </a>
-              {% endif %}
-              <a href="{{ url_for('lab11_microblog') }}" class="navbar-item">
-                Microblog
-              </a>
-            </div>
-            <div class="navbar-end">
-              {% if not current_user.is_authenticated %}
-              <a href="{{ url_for('lab12_login') }}" class="navbar-item">
-                Login
-              </a>
-              <a href="{{ url_for('lab12_signup') }}" class="navbar-item">
-                Sign Up
-              </a>
-              {% else %}
-              <img src="{{ current_user.avatar_url }}" width="52">
-              <a href="{{ url_for('lab12_logout') }}" class="navbar-item">
-                Logout
-              </a>
-              {% endif %}
-            </div>
-          </div>
+  <header>
+    <h2 class="logo">Logo</h2>
+    <nav class="navigation">
+      <a href="">
+        Home
+      </a>
+      <a href="">
+        About
+      </a>
+      <a href="">
+        Services
+      </a>
+      <a href="">
+        Contact
+      </a>
+      {% if not current_user.is_authenticated %}
+      <button class="btnLogin-popup">Login</button>
+      {% else %}
+      <button class="btnLogout" onclick="location.href='/project/logout';">Logout</button>
+      {% endif %}
+    </nav>
+  </header>
+  <div class="wrapper">
+    <span class="icon-close"><ion-icon name="close-outline"></ion-icon></span>
+    <div class="form-box login">
+      <h2>Login</h2>
+      <form action="">
+        <div class="input-box">
+          <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+          <input type="email" required>
+          <label>Email</label>
         </div>
-      </nav>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+          <input type="password" required>
+          <label>Password</label>
+        </div>
+        <button type="submit" class="btn">Login</button>
+        <div class="SSO-login">
+          <a href='/google'><ion-icon name="logo-google"></ion-icon></a>
+        </div>
+        <div class="login-register">
+          <p>Don't have an account? <a href="#" class="register-link">Register</a></p>
+        </div>
+      </form>
     </div>
-    <div class="hero-body">
-      <div class="container has-text-centered">
-        {% block content %}
-        {% endblock %}
-      </div>
+
+    <div class="form-box register">
+      <h2>Register</h2>
+      <form action="#">
+        <div class="input-box">
+          <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+          <input type="text" required>
+          <label>Username</label>
+        </div>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+          <input type="email" required>
+          <label>Email</label>
+        </div>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+          <input type="password" required>
+          <label>Password</label>
+        </div>
+        <button type="submit" class="btn">Register</button>
+        <div class="login-register">
+          <p>Already have an account? <a href="#" class="login-link">Login</a></p>
+        </div>
+      </form>
     </div>
-  </section>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-
-      // Get all "navbar-burger" elements
-      const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-
-      // Add a click event on each of them
-      $navbarBurgers.forEach(el => {
-        el.addEventListener('click', () => {
-
-
-          // Get the target from the "data-target" attribute
-          const target = el.dataset.target;
-          const $target = document.getElementById(target);
-
-
-          // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-          el.classList.toggle('is-active');
-          $target.classList.toggle('is-active');
-
-
-        });
-      });
-
-
-    });
-  </script>
+  </div>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="../../static/js/base.js"></script>
 </body>
-
 
 </html>
