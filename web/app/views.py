@@ -444,3 +444,7 @@ def google_auth():
 
 if __name__ == "__main__":  #and the final closing function
     app.run(debug=True)
+
+@app.route('/test')
+def test():
+   return render_template('project_flask/review.html')

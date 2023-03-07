@@ -1,0 +1,45 @@
+{% extends "project_flask/base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>login1</title>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<!--add CSS HERE-->
+    <link rel="stylesheet" href="" /><!--add CSS HERE-->
+<!--add CSS HERE-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAF8gNw7piHZpeLTu5UzZgkvMxsJpEybY0&sensor=false&libraries=places&signature=C-qIw8qLTHPAr_Mb_Bb7tFoiTFE="></script>
+    <script type="text/javascript" src="https://rawgit.com/Logicify/jquery-locationpicker-plugin/master/dist/locationpicker.jquery.js"></script>
+    <script src="../../static/js/map.js"></script>
+</head>
+
+<body>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <form action="">
+                    <h2></h2>
+                    <div class="Problembox">
+                        <label for="">Your problem</label>
+                        <input type="text" required/>
+                        
+                    </div>
+                    
+                    
+                </form>
+                <div id="us2" style="width: 500px; height: 400px;"></div>
+                <button>confirm</button>
+            </div>
+        </div>
+    </section>
+    <script src="/js/login1.js"></script>
+</body>
+
+</html>
+{% endblock %}
