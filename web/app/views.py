@@ -249,11 +249,13 @@ def lab12_profile():
             
 
             # if this returns a user, then the email already exists in database
-            if user:
-                # if a user is found, we want to redirect back to signup
-                # page so user can try again
-                flash('Email address already exists')
-                return redirect(url_for('lab12_profile'))
+            user = AuthUser.query.filter_by(email=email_old).first()
+            if email != email_old:
+                if user:
+                    # if a user is found, we want to redirect back to signup
+                    # page so user can try again
+                    flash('Email address already exists')
+                    return redirect(url_for('lab12_profile'))
 
             # update User
             user = AuthUser.query.filter_by(email=email_old).first()
