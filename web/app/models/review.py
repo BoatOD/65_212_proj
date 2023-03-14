@@ -12,23 +12,23 @@ class review(db.Model, SerializerMixin):
     date = db.Column(db.String(60))
     avatar_url = db.Column(db.String(100))
     lat = db.Column(db.Integer)
-    rot = db.Column(db.Integer)
+    lot = db.Column(db.Integer)
 
-    def __init__(self, name, message, email , date, avatar_url, lat, rot):
+    def __init__(self, name, message, email , date, avatar_url, lat, lot):
         self.name = name
         self.message = message
         self.email = email
         self.date = date
         self.avatar_url = avatar_url
         self.lat = lat
-        self.rot = rot
+        self.lot = lot
 
 
-    def update(self, name, message, email , date, avatar_url, lat, rot):
+    def update(self, name, message, email , date, avatar_url, lat, lot):
         self.name = name
         self.message = message
         self.email = email
         self.date = date
         self.avatar_url = avatar_url
         self.lat = lat
-        self.rot = rot
+        self.lot = lot

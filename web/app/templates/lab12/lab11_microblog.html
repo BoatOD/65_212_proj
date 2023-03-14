@@ -18,28 +18,6 @@
 </head>
 
 <body>
-    <!-- <nav class="navbar navbar-expand-md navbar-light" id="barr">
-        <div class="container">
-            <div class="navbar-nav">
-                <h4 class="myaccount">Microblog</h2>
-            </div>
-            {% if current_user.is_authenticated %}
-            <div class="box3">
-                <img id="user-pic" class="tw-user-small rounded-circle" src="{{ current_user.avatar_url }}"> &nbsp;
-                <button id="logout" type="button">Logout</button>
-            </div>
-            {% else %}
-            <div class="login-signup-bottom">
-                <a class="login-signup" href="http://localhost:56733/lab12/login">
-                    <span id="login-bottom">Login</span>
-                </a>
-                <a class="login-signup" href="http://localhost:56733/lab12/signup">
-                    <span id="signup-bottom">Signup</span>
-                </a>
-            </div>
-            {% endif %}
-        </div>
-    </nav> -->
     <div class="container">
         <div class="row">
             <nav class="sidebar close col">
@@ -130,13 +108,9 @@
                 <div id="add-edit" class="container" hidden="hidden">
                     <h2 id="add-edit-caption" class="textt">Tweet New Post:</h2>
                     <form id="addNewBlogForm">
-                        <!-- <label for="name">ชื่อ</label> -->
-                        <!-- <input type="text" id="name" name="name" value="{{ current_user.name }}" required> -->
                         <input type="hidden" id="name" name="name" value="{{ current_user.name }}">
                         <label class="textt" for="message">message</label>
                         <input type="text" id="message" name="message" placeholder="Your message.." required>
-                        <!-- <label for="email">email</label> -->
-                        <!-- <input type="email" id="email" name="email" placeholder="Your email.." required> -->
                         <input type="hidden" id="email" name="email" value="{{ current_user.email }}">
                         <input type="hidden" id="entryid" name="id" value="">
                         <input type="hidden" id="date" name="date" value="">

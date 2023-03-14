@@ -32,7 +32,7 @@ def seed_db():
                date='20/2/2566 16:56:47', 
                avatar_url='https://ui-avatars.com/api/?name=T+&background=4afabf&color=b50540',
                lat=18.806615,
-               rot=98.952398))
+               lot=98.952398))
     db.session.add(
         problems(name='Tanachoh Vattanashusagul', 
                  message='LOL', 
@@ -40,7 +40,7 @@ def seed_db():
                  date='20/2/2566 16:56:47', 
                  avatar_url='https://ui-avatars.com/api/?name=T+&background=4afabf&color=b50540',
                  lat=18.806615,
-                 rot=98.952398))
+                 lot=98.952398))
     db.session.commit()
 
 if __name__ == "__main__":

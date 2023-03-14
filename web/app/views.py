@@ -475,8 +475,80 @@ def project_signup():
             db.session.commit()
 
 
-        return redirect(url_for('/project/home'))
+        return redirect(url_for('project_home'))
     return render_template('project_flask/home.html')
+
+@app.route('/project/profile', methods=('GET', 'POST'))
+@login_required
+def project_profile():
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        app.logger.debug(str(result))
+        password = result.get('password', '')
+        avatar_url = request.files['avatar_url']
+        validated = True
+        validated_dict = {}
+        valid_keys = ['email', 'name' , 'email_old']
+
+        if password == '':
+            flash('Please enter a password')
+            return redirect(url_for('project_profile'))
+            
+
+        # validate the input
+        for key in result:
+            app.logger.debug(str(key)+": " + str(result[key]))
+            # screen of unrelated inputs
+            if key not in valid_keys:
+                continue
+
+
+            value = result[key].strip()
+            if not value or value == 'undefined':
+                validated = False
+                break
+            validated_dict[key] = value
+            # code to validate and add user to database goes here
+        app.logger.debug("validation done")
+        if validated:
+            app.logger.debug('validated dict: ' + str(validated_dict))
+            email_old = validated_dict['email_old']
+            email = validated_dict['email']
+            name = validated_dict['name']
+            
+            user = AuthUser.query.filter_by(email=email_old).first()
+            if not check_password_hash(user.password, password):
+                flash('Password incorrect')
+                return redirect(url_for('lab12_profile'))
+            
+
+            # if this returns a user, then the email already exists in database
+            user = AuthUser.query.filter_by(email=email_old).first()
+            if email != user.email:
+                if user:
+                    # if a user is found, we want to redirect back to signup
+                    # page so user can try again
+                    flash('Email address already exists')
+                    return redirect(url_for('lab12_profile'))
+
+            # update User
+            user = AuthUser.query.filter_by(email=email_old).first()
+            app.logger.debug("preparing to add")
+            if avatar_url == '':
+                avatar_url = gen_avatar_url(email, name)
+            updatedict = {'email':email , 'name':name , 'avatar_url':avatar_url.read()}
+            user.update(**updatedict)
+            
+            # update Blog
+            blogentry = BlogEntry.query.filter_by(email=email_old).all()
+            for i in blogentry:
+                updatedict_blog = {'name':name , 'message':i.message , 'email':email, 'date':i.date , 'avatar_url':avatar_url }
+                i.update(**updatedict_blog)
+
+            #commit
+            db.session.commit()
+        return redirect(url_for('project_profile'))
+    return render_template('project_flask/profile.html')
 
 @app.route('/google')
 def google():
