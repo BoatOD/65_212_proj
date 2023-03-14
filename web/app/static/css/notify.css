@@ -13,7 +13,7 @@
 
 body {
     font-family: 'montserrat', sans-serif;
-    background: url('../pic/sky-stars.png'),linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
+    background: url('../img/sky-stars.png'),linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
     height: 100%;
     background-size: contain;
     background-position: bottom;
