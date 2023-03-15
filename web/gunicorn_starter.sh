@@ -16,3 +16,4 @@ else
     echo "Running on Gunicorn"
     gunicorn main:app -c "$PWD"/gunicorn.config.py
 fi
+
