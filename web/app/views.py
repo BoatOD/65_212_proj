@@ -4,8 +4,10 @@ import string
 from flask import (jsonify, render_template, request, url_for, flash, redirect)
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
+from werkzeug.utils import secure_filename
 from sqlalchemy.sql import text
 from flask_login import login_user, login_required, logout_user, current_user
+import urllib.request
 
 import json
 
@@ -21,11 +23,16 @@ from app.models.review import review
 
 from app import oauth
 
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
 @login_manager.user_loader
 def load_user(user_id):
     # since the user_id is just the primary key of our
     # user table, use it in the query for the user
     return AuthUser.query.get(int(user_id))
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # @app.route('/')
 # def home():
@@ -385,7 +392,7 @@ def lab12_logout():
 @app.route('/project/home')
 def project_home():
    maps = review.query.all()
-   return render_template('project_flask/home.html',maps=maps)
+   return render_template('project_flask/index.html',maps=maps)
 
 @app.route('/project/login', methods=('GET', 'POST'))
 def project_login():
@@ -485,7 +492,7 @@ def project_profile():
         result = request.form.to_dict()
         app.logger.debug(str(result))
         password = result.get('password', '')
-        avatar_url = request.files['avatar_url']
+        avatar_url = ''
         validated = True
         validated_dict = {}
         valid_keys = ['email', 'name' , 'email_old']
@@ -521,6 +528,18 @@ def project_profile():
                 flash('Password incorrect')
                 return redirect(url_for('lab12_profile'))
             
+            if 'file' in request.files:
+                file = request.files['file']
+                if file.filename == '':
+                    flash('No image selected for uploading')
+                    return redirect(url_for('project_profile'))
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    avatar_url = file.filename
+                if file and not allowed_file(file.filename):
+                    flash('Allowed image types are - png, jpg, jpeg, gif')
+                    return redirect(url_for('project_profile'))
 
             # if this returns a user, then the email already exists in database
             user = AuthUser.query.filter_by(email=email_old).first()
@@ -534,9 +553,11 @@ def project_profile():
             # update User
             user = AuthUser.query.filter_by(email=email_old).first()
             app.logger.debug("preparing to add")
-            if avatar_url == '':
+            
+            if 'file' not in request.files:
                 avatar_url = gen_avatar_url(email, name)
-            updatedict = {'email':email , 'name':name , 'avatar_url':avatar_url.read()}
+            
+            updatedict = {'email':email , 'name':name , 'avatar_url':avatar_url}
             user.update(**updatedict)
             
             # update Blog
@@ -544,11 +565,19 @@ def project_profile():
             for i in blogentry:
                 updatedict_blog = {'name':name , 'message':i.message , 'email':email, 'date':i.date , 'avatar_url':avatar_url }
                 i.update(**updatedict_blog)
-
             #commit
             db.session.commit()
+            flash('Change Succeed')
         return redirect(url_for('project_profile'))
-    return render_template('project_flask/profile.html')
+    return render_template('project_flask/profile.html', )
+
+@app.route('/display/<filename>')
+@login_required
+def display_image(filename):
+    if current_user.avatar_url[:5] == 'https':
+        return redirect(url_for('static', filename='uploads/' + filename), code=301)
+    else:
+        return redirect(url_for('static', filename='uploads/' + filename), code=301)
 
 @app.route('/google')
 def google():

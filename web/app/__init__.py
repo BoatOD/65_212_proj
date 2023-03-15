@@ -8,7 +8,11 @@ from authlib.integrations.flask_client import OAuth
 
 app = Flask(__name__, static_folder='static')
 
+UPLOAD_FOLDER = 'static/uploads/'
 
+app.secret_key = "cairocoders-ednalan"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # this DEBUG config here will be overridden by FLASK_DEBUG shell environment
 app.config['DEBUG'] = True
@@ -16,7 +20,6 @@ app.config['SECRET_KEY'] = 'a8112ea716969327fc2a49fc8dd0e2ca9fa484033e771552'
 app.config['JSON_AS_ASCII'] = False
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite://")
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite://img.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['GOOGLE_CLIENT_ID'] = os.getenv("GOOGLE_CLIENT_ID", None)

@@ -11,10 +11,11 @@ class review(db.Model, SerializerMixin):
     email = db.Column(db.String(50))
     date = db.Column(db.String(60))
     avatar_url = db.Column(db.String(100))
-    lat = db.Column(db.Integer)
-    lot = db.Column(db.Integer)
+    lat = db.Column(db.Float)
+    lot = db.Column(db.Float)
+    picname = db.Column(db.String(500))
 
-    def __init__(self, name, message, email , date, avatar_url, lat, lot):
+    def __init__(self, name, message, email , date, avatar_url, lat, lot, picname):
         self.name = name
         self.message = message
         self.email = email
@@ -22,9 +23,10 @@ class review(db.Model, SerializerMixin):
         self.avatar_url = avatar_url
         self.lat = lat
         self.lot = lot
+        self.picname = picname
 
 
-    def update(self, name, message, email , date, avatar_url, lat, lot):
+    def update(self, name, message, email , date, avatar_url, lat, lot, picname):
         self.name = name
         self.message = message
         self.email = email
@@ -32,3 +34,4 @@ class review(db.Model, SerializerMixin):
         self.avatar_url = avatar_url
         self.lat = lat
         self.lot = lot
+        self.picname = picname

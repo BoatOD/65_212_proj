@@ -14,6 +14,7 @@
       </div>
       {% endif %}
       {% endwith %}
+      <img src="{{ url_for('display_image', filename=current_user.avatar_url) }}">
       <form method="POST" enctype="multipart/form-data">
         <div id="email-name">
           <div class="field">
@@ -30,7 +31,7 @@
           </div>
           <div class="field">
             <div class="control">
-              <input class="input is-large" type="file" name="avatar_url" value="" autofocus="">
+              <input class="input is-large" type="file" name="file" value="" autofocus="">
             </div>
           </div>
           <input class="button is-block is-info is-large is-fullwidth" type="button" name="button" onclick="hidebottom()" value="Confirm">
