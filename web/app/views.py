@@ -27,9 +27,9 @@ def load_user(user_id):
     # user table, use it in the query for the user
     return AuthUser.query.get(int(user_id))
 
-# @app.route('/')
-# def home():
-#     return "Flask says 'Hello world!'"
+@app.route('/')
+def home():
+     return "Flask says 'Hello world!'"
 
 @app.route('/crash')
 def crash():
@@ -131,7 +131,7 @@ def lab11_microblog():
     return render_template('lab12/lab11_microblog.html', posts=posts)
 
 @app.route('/microblog', methods=('GET', 'POST'))
-@login_required
+
 def microblog():
     if request.method == 'POST':
         result = request.form.to_dict()
@@ -601,6 +601,115 @@ def google_auth():
 if __name__ == "__main__":  #and the final closing function
     app.run(debug=True)
 
-@app.route('/test')
-def test():
-   return render_template('project_flask/review.html')
+@app.route('/project/review', methods=('GET', 'POST'))
+def reviews():
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        app.logger.debug(str(result))
+        id_ = result.get('id', '')
+        validated = True
+        validated_dict = dict()
+        valid_keys = ['message']
+
+
+        # validate the input
+        for key in result:
+            app.logger.debug(key, result[key])
+            # screen of unrelated inputs
+            if key not in valid_keys:
+                continue
+
+
+            value = result[key].strip()
+            if not value or value == 'undefined':
+                validated = False
+                break
+            validated_dict[key] = value
+
+
+        if validated:
+            app.logger.debug('validated dict: ' + str(validated_dict))
+            # if there is no id: create a new contact entry
+            if not id_:
+                entry = review(**validated_dict)
+                app.logger.debug(str(entry))
+                db.session.add(entry)
+            # if there is an id already: update the contact entry
+            else:
+                contact = review.query.get(id_)
+                contact.update(**validated_dict)
+
+
+            db.session.commit()
+
+
+        return review_content()
+
+    return render_template('project_flask/review.html')
+
+@app.route("/review/blog")
+def review_content():
+    microblogs = []
+    db_microblogs = review.query.all()
+
+    microblogs = list(map(lambda x: x.to_dict(), db_microblogs))
+    app.logger.debug("DB microblogs: " + str(microblogs))
+
+    return jsonify(microblogs)
+
+    
+@app.route('/project/problems')
+def problem():
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        app.logger.debug(str(result))
+        id_ = result.get('id', '')
+        validated = True
+        validated_dict = dict()
+        valid_keys = ['message']
+
+
+        # validate the input
+        for key in result:
+            app.logger.debug(key, result[key])
+            # screen of unrelated inputs
+            if key not in valid_keys:
+                continue
+
+
+            value = result[key].strip()
+            if not value or value == 'undefined':
+                validated = False
+                break
+            validated_dict[key] = value
+
+
+        if validated:
+            app.logger.debug('validated dict: ' + str(validated_dict))
+            # if there is no id: create a new contact entry
+            if not id_:
+                entry = problems(**validated_dict)
+                app.logger.debug(str(entry))
+                db.session.add(entry)
+            # if there is an id already: update the contact entry
+            else:
+                contact = problems.query.get(id_)
+                contact.update(**validated_dict)
+
+
+            db.session.commit()
+
+
+        return problems_content()
+    
+    return render_template('project_flask/problems.html')
+
+@app.route("/problems/blog")
+def problems_content():
+    microblogs = []
+    db_microblogs = problems.query.all()
+
+    microblogs = list(map(lambda x: x.to_dict(), db_microblogs))
+    app.logger.debug("DB microblogs: " + str(microblogs))
+
+    return jsonify(microblogs)

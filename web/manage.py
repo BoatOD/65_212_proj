@@ -41,6 +41,7 @@ def seed_db():
                  avatar_url='https://ui-avatars.com/api/?name=T+&background=4afabf&color=b50540',
                  lat=18.806615,
                  lot=98.952398))
+    
     db.session.commit()
 
 if __name__ == "__main__":
