@@ -1,67 +1,73 @@
 {% extends "project_flask/base.html" %}
 {% block content %}
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-<h1 class="title">
-    Welcome, {{ current_user.name }}!!
+<link rel="stylesheet" href="../../static/css/profile.css">
+<div class="profilee">
+  <h1 class="title">
+    Change Profile
   </h1>
-  <div class="column is-4 is-offset-4">
-    <h3 class="title">Change Profile</h3>
-    <div class="box">
-      {% with messages = get_flashed_messages() %}
-      {% if messages %}
-      <div class="notification is-danger">
-        {{ messages[0] }}
+  <div class="">
+    <div class="form-box">
+      <div class="img-user">
+        <img src="{{ url_for('display_image', filename=current_user.avatar_url) }}">
       </div>
-      {% endif %}
-      {% endwith %}
-      <img src="{{ url_for('display_image', filename=current_user.avatar_url) }}">
       <form method="POST" enctype="multipart/form-data">
         <div id="email-name">
-          <div class="field">
-            <div class="control">
-              <input class="input is-large" type="email" name="email" value="{{ current_user.email }}" placeholder="Email"
-                autofocus="">
-            </div>
+          <div class="input-box">
+            <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+            <input type="text" name="name" value="{{ current_user.name }}" required>
+            <label>Username</label>
           </div>
-          <div class="field">
-            <div class="control">
-              <input class="input is-large" type="text" name="name" value="{{ current_user.name }}" placeholder="Name"
-                autofocus="">
-            </div>
+          <div class="input-box">
+            <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+            <input type="email" name="email" value="{{ current_user.email }}" required>
+            <label>Email</label>
           </div>
-          <div class="field">
-            <div class="control">
-              <input class="input is-large" type="file" name="file" value="" autofocus="">
-            </div>
+          <div id="input-file">
+            <input id="file-input" type="file" name="file" value="">
+            <label for="file-input">Select some picture</label>
+            <span id="file-nameee">
+              <span id="file-name">None</span>
+            </span>
           </div>
-          <input class="button is-block is-info is-large is-fullwidth" type="button" name="button" onclick="hidebottom()" value="Confirm">
+          <input class="button is-block is-info is-large is-fullwidth btn" type="button" name="button"
+            onclick="hidebottom()" value="Confirm">
         </div>
-        <div class="field">
-          <div class="control">
-            <input class="input is-large" type="hidden" name="email_old" value="{{ current_user.email }}" autofocus="">
-          </div>
-        </div>
+        <input class="input is-large" type="hidden" name="email_old" value="{{ current_user.email }}" autofocus="">
         <div id="password" hidden="hidden">
+          <div class="input-box">
+            <span class="icon"><ion-icon name="key-outline"></ion-icon></span>
+            <input type="password" name="password" value="">
+            <label>Confirm Password</label>
+          </div>
           <div class="field">
             <div class="control">
-              <input class="input is-large" type="password" name="password" value="" placeholder="Confirm Password"
-                autofocus="">
+              
             </div>
           </div>
-          <button class="button is-block is-info is-large is-fullwidth" >Change Profile</button>
+          <button class="button is-block is-info is-large is-fullwidth btn">Change Profile</button>
         </div>
       </form>
     </div>
   </div>
-  <script>
-    function hidebottom(){
-      if($('#password').attr('hidden')){
-        $('#email-name').attr('hidden', 'hidden');
-        $('#password').removeAttr('hidden');
-      } else {
-        $('#password').attr('hidden', 'hidden');
-        $('#email-name').removeAttr('hidden');
-      }
+</div>
+<script>
+  let inputfile = document.getElementById('file-input');
+  let fileNameField = document.getElementById('file-name')
+  inputfile.addEventListener('change', function(event){
+    let uploadedFileName = event.target.files[0].name;
+    fileNameField.textContent = uploadedFileName;
+  });
+
+  function hidebottom() {
+    if ($('#password').attr('hidden')) {
+      $('#email-name').attr('hidden', 'hidden');
+      $('#password').removeAttr('hidden');
+    } else {
+      $('#password').attr('hidden', 'hidden');
+      $('#email-name').removeAttr('hidden');
     }
-  </script>
+  }
+
+</script>
 {% endblock %}

@@ -1,4 +1,236 @@
 {% extends "project_flask/base.html" %}
 {% block content %}
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAF8gNw7piHZpeLTu5UzZgkvMxsJpEybY0&sensor=false&region=TH&language=TH&libraries=places&signature=C-qIw8qLTHPAr_Mb_Bb7tFoiTFE="></script>
+<script type="text/javascript"
+    src="https://rawgit.com/Logicify/jquery-locationpicker-plugin/master/dist/locationpicker.jquery.js"></script>
+<link rel="stylesheet" href="../../static/css/notify.css">
+<script src="../../static/js/map.js"></script>
+{% if current_user.is_authenticated %}
+<div id="title">
+    <div id="Texttitle">
+        <span>Report your problem.</span>
+    </div>
+</div>
+<div class="New">
+    <div class="Newpost">
+        <div class="add-edit">
+            <div class="post" id="post">
+                <form id="addNewBlogForm">
+                    <label for="message">Message</label>
+                    <textarea class="addpost" id="message" name="message" placeholder="Type your reviews..."
+                        required></textarea>
+                    <input class="addpost" type="hidden" id="entryid" name="id" value="">
+                    <input class="addpost" type="hidden" id="name" name="name" value="{{ current_user.name }}">
+                    <input class="addpost" type="hidden" id="email" name="email" value="{{ current_user.email }}">
+                    <label for="picture">Choose a picture</label>
+                    <input type="file" id="file" name="file">
+                    <br>
+                    <input type="text" id="location" style="width: 200px" />
+                    <div id="us2" style="width: 100%; height: 400px;"></div>
+                    <input class="addpost" type="hidden" id="lng" name="lng" style="width: 200px" />
+                    <input class="addpost" type="hidden" id="lat" name="lat" style="width: 200px" />
+                    <input class="addpost" type="hidden" id="avatar_url" name="avatar_url"
+                        value="{{ current_user.avatar_url }}">
+                    <input class="addpost" type="hidden" id="date" name="date" value="">
+                    <br>
+                    <input class="button-form" id="submit" type="submit" name="submit" value="Submit">
+                    <button class="button-form" id="clear_form" type="button">Clear</button>
+                    <button class="button-form" id="cancel_form" type="button">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="blog_display">
+    <button class="textt button-form" id="add_blog" type="button">Tweet</button>
+</div>
+{% endif %}
+<div class="blogPost" id="blogPost">
 
+</div>
+<div class="emp" id="{{ current_user.email }}" hidden="hidden">
+</div>
+<script src="../../static/js/text.js"></script>
+<script>
+    const Newpost = document.querySelector('.Newpost');
+    const Popup = document.querySelector('#blog_display');
+    const Close = document.querySelector('.cclose');
+
+    function refreshblog(formData) {
+        $(".item2").remove();
+        var check = document.getElementsByClassName('emp')[0].id;
+        for (let i = 0; i < formData.length; i++) {
+            if (check == formData[i].email) {
+                $("#blogPost").prepend(
+                    '<div class="item2" id="' + formData[i].id + '">' +
+                        '<div class="content">' +
+                            '<div class="card-img">' +
+                                '<img decoding="async" src="../../static/uploads/' + formData[i].picname + '" alt="">' +
+                            '</div>' +
+                            '<div class="card-body">' +
+                                '<p>' + formData[i].message + '</p>' +
+                                '<div class="user">' +
+                                    '<img decoding="async" src="{{ url_for("display_image", filename=current_user.avatar_url) }}" alt="">' +
+                                    '<div class="user-info">' +
+                                        '<h5>' + formData[i].name + '</h5>' +
+                                        '<small>' + formData[i].email + '</small>' +
+                                        '<small id="time">' + formData[i].date + '</small>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div id="edit_remove">' +
+                                '<input type="button" class="edit"' + '" value="✏️" onclick="prePopulateForm(' + formData[i].id + ')">' +
+                                '<input type="button" class="remove"' + '" value="🗑️" onclick="removeItem(' + formData[i].id + ')">' +
+                                '<a href="https://www.google.com/maps/search/?api=1&query=' + formData[i].lat + '%2C' + formData[i].lng + '"><input type="button" class="remove"' + '" value="🌍"></a>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>'
+                );
+            } else {
+                $("#blogPost").prepend(
+                    '<div class="item2" id="' + formData[i].id + '">' +
+                        '<div class="content">' +
+                            '<div class="card-img">' +
+                                '<img decoding="async" src="../../static/uploads/' + formData[i].picname + '" alt="">' +
+                            '</div>' +
+                            '<div class="card-body">' +
+                                '<p>' + formData[i].message + '</p>' +
+                                '<div class="user">' +
+                                    '<img decoding="async" src="' + formData[i].avatar_url + '" alt="">' +
+                                    '<div class="user-info">' +
+                                        '<h5>' + formData[i].name + '</h5>' +
+                                        '<small>' + formData[i].email + '</small>' +
+                                        '<small id="time">' + formData[i].date + '</small>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div id="edit_remove">' +
+                                '<a href="https://www.google.com/maps/search/?api=1&query=' + formData[i].lat + '%2C' + formData[i].lng + '"><input type="button" class="remove"' + '" value="🌍"></a>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>'
+                );
+            }
+        }
+    }
+
+
+    $(document).ready(function () {
+        (function () {
+            $.getJSON("/problems/blog", refreshblog);
+        })();
+    });
+
+    $("#addNewBlogForm").submit(function (event) {
+        // prevent default html form submission action
+        event.preventDefault();
+
+        var date = new Date();
+        var offset = date.getTimezoneOffset();
+        var offset1 = date.getTime();
+        var timee = offset + offset1;
+        document.getElementById("date").value = date.toLocaleString(timee, "en-US", {
+            dateStyle: "full",
+            timeStyle: "full"
+        });
+
+        // pack the inputs into a dictionary
+        var formData = new FormData();
+        $(".addpost").each(function () {
+            var key = $(this).attr('name');
+            var val = $(this).val();
+            if (key != 'submit') {
+                formData.append(key, val);
+            }
+        });
+        formData.append("file", document.getElementById('file').files[0]);
+        // make a POST call to the back end w/ a callback to refresh the table
+        $.ajax({
+            url: '/Notify',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                refreshblog(response)
+                clearForm_1();
+                Newpost.classList.remove('active-popup');
+            }
+        });
+
+        toggleView();
+    });
+
+
+    function clearForm() {
+        $('#addNewBlogForm')[0].reset();
+        $('#entryid').val('');
+    }
+
+    function clearForm_1() {
+        $('#message').val('');
+        $('#entryid').val('');
+        $('#date').val('');
+    }
+
+    function prePopulateForm(id) {
+        $('#addNewBlogForm')[0].reset();
+        $.getJSON("/problems/blog", function (data) {
+            console.log(data);
+            var keyToFind = id;
+            for (var i in data) {
+                if (data[i].id == keyToFind) {
+                    $('#name').val(data[i].name);
+                    $('#message').val(data[i].message);
+                    $('#email').val(data[i].email);
+                    $('#entryid').val(id);
+                    break;
+                }
+            }
+        });
+        Newpost.classList.add('active-popup');
+    }
+
+    function removeItem(id) {
+        if (!confirm("Delete " + '?')) {
+            return false;
+        }
+        var url = "/project/remove-problems"
+        var formData = { 'id': id };
+        $.post(url, formData, function (blogData) {
+            refreshblog(blogData);
+        });
+
+        $("#").detach();
+    }
+
+    $("#add_blog").click(function () {
+        clearForm_1();
+    });
+
+    $("#clear_form").click(function () {
+        clearForm();
+    });
+
+    $("#cancel_form").click(function () {
+        clearForm_1();
+        Newpost.classList.remove('active-popup');
+    });
+
+    $("#logout").click(function () {
+        clearForm();
+        window.location.href = "lab12/logout";
+    });
+
+    Popup.addEventListener('click', () => {
+        Newpost.classList.add('active-popup');
+    });
+
+    Close.addEventListener('click', () => {
+        Newpost.classList.remove('active-popup');
+    });
+</script>
 {% endblock %}

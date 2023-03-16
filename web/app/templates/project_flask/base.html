@@ -11,19 +11,21 @@
 
 <body>
   <header>
-    <h2 class="logo">Logo</h2>
+    <img src="../../static/img/logo2.png" id="logo">
     <nav class="navigation">
-      <a href="">
+      <a href="http://localhost:56733/project/home">
         Home
       </a>
-      <a href="">
-        About
+      {% if current_user.is_authenticated %}
+      <a href="http://localhost:56733/project/profile">
+        Profile
       </a>
-      <a href="">
-        Services
+      {% endif %}
+      <a href="http://localhost:56733/project/review">
+        Review
       </a>
-      <a href="">
-        Contact
+      <a href="http://localhost:56733/project/problems">
+        Notify
       </a>
       {% if not current_user.is_authenticated %}
       <button class="btnLogin-popup">Login</button>
@@ -94,7 +96,7 @@
       </form>
     </div>
   </div>
-  <div>
+  <div id="content">
     {% block content %}
     {% endblock %}
   </div>

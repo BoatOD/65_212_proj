@@ -1,10 +1,8 @@
 from flask.cli import FlaskGroup
 from werkzeug.security import generate_password_hash
 from app import app, db
-from app.models.contact import Contact
-from app.models.BlogEntry import BlogEntry
-from app.models.authuser import AuthUser, PrivateContact
-from app.models.review import review
+from app.models.authuser import AuthUser
+from app.models.review import Review
 from app.models.problems import problems
 
 cli = FlaskGroup(app)
@@ -18,28 +16,22 @@ def create_db():
 @cli.command("seed_db")
 def seed_db():
     db.session.add(
-        Contact(firstname='สมชาย', lastname='ทรงแบด', phone='081-111-1111'))
+        AuthUser(email="flask@204212", name='สมชาย ทรงแบด',password=generate_password_hash('1234',method='sha256'), avatar_url='user.png'))
     db.session.add(
-        BlogEntry(name='Tanachoh Vattanashusagul', message='LOL', email='saoraza1234@gmail.com', date='20/2/2566 16:56:47', avatar_url='https://ui-avatars.com/api/?name=T+&background=4afabf&color=b50540'))
-    db.session.add(
-        AuthUser(email="flask@204212", name='สมชาย ทรงแบด',password=generate_password_hash('1234',method='sha256'), avatar_url='https://ui-avatars.com/api/?name=\สมชาย+ทรงแบด&background=83ee03&color=fff'))
-    db.session.add(
-        PrivateContact(firstname='ส้มโอ', lastname='โอเค', phone='081-111-1112', owner_id=1))
-    db.session.add(
-        review(name='Tanachoh Vattanashusagul', 
+        Review(name='BoatOD', 
                message='LOL', 
                email='saoraza1234@gmail.com', 
                date='20/2/2566 16:56:47', 
-               avatar_url='https://ui-avatars.com/api/?name=T+&background=4afabf&color=b50540',
+               avatar_url='user.png',
                lat=18.806615,
                lng=98.952398,
                picname=''))
     db.session.add(
-        problems(name='Tanachoh Vattanashusagul', 
+        problems(name='BoatOD', 
                  message='LOL', 
                  email='saoraza1234@gmail.com', 
                  date='20/2/2566 16:56:47', 
-                 avatar_url='https://ui-avatars.com/api/?name=T+&background=4afabf&color=b50540',
+                 avatar_url='user.png',
                  lat=18.806615,
                  lng=98.952398,
                  picname=''))

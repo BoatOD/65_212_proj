@@ -1,3 +1,7 @@
+const Newpost = document.querySelector('.Newpost');
+const Popup = document.querySelector('#blog_display');
+const Close = document.querySelector('.cclose');
+
 function refreshblog(formData) {
     $(".item2").remove();
     var check = document.getElementsByClassName('emp')[0].id;
@@ -7,12 +11,12 @@ function refreshblog(formData) {
                 '<div class="item2" id="' + formData[i].id + '">'+
                 '<div class="content">'+
                 '<div class="card-img">'+
-                '<img decoding="async" src="../static/img/bg.jpeg" alt="">'+
+                '<img decoding="async" src="../../static/uploads/'+ formData[i].picname +'" alt="">'+
                 '</div>'+
                 '<div class="card-body">'+
                 '<p>' + formData[i].message + '</p>'+
                 '<div class="user">'+
-                '<img decoding="async" src="'+ formData[i].avatar_url +'" alt="">'+
+                '<img decoding="async" src="../../static/uploads/'+ formData[i].avatar_url +'" alt="">'+
                 '<div class="user-info">'+
                 '<h5>' + formData[i].name + '</h5>'+
                 '<small>' + formData[i].email + '</small>'+
@@ -28,11 +32,11 @@ function refreshblog(formData) {
                 '</div>'
                 );
         } else {
-            $(".blogPost1").prepend(
+            $("#blogPost").prepend(
                 '<div class="item2" id="' + formData[i].id + '">'+
                 '<div class="content">'+
                 '<div class="card-img">'+
-                '<img decoding="async" src="../static/img/bg.jpeg" alt="">'+
+                '<img decoding="async" src="../../static/uploads/'+ formData[i].picname +'" alt="">'+
                 '</div>'+
                 '<div class="card-body">'+
                 '<p>' + formData[i].message + '</p>'+
@@ -92,6 +96,7 @@ $("#addNewBlogForm").submit(function (event) {
         success:function(response){
             refreshblog(response)
             clearForm_1();
+            Newpost.classList.remove('active-popup');
         }
     });
 
@@ -132,8 +137,7 @@ function removeItem(id) {
     if (!confirm("Delete " + '?')) {
         return false;
     }
-
-    var url = "lab11/remove_content"
+    var url = "/project/remove-review"
     var formData = { 'id': id };
     $.post(url, formData, function (blogData) {
         refreshblog(blogData);
@@ -142,27 +146,8 @@ function removeItem(id) {
     $("#").detach();
 }
 
-function toggleView() {
-    if ($('#blog_display').attr('hidden')) {
-        $('#blog_display').removeAttr('hidden');
-        $('#add-edit').attr('hidden', 'hidden');
-    } else {
-        $('#blog_display').attr('hidden', 'hidden');
-        $('#add-edit').removeAttr('hidden');
-    }
-}
-
 $("#add_blog").click(function () {
     clearForm_1();
-    var date = new Date();
-    var offset = date.getTimezoneOffset();
-    var offset1 = date.getTime();
-    var timee = offset + offset1;
-    document.getElementById("date").value = date.toLocaleString(timee, "en-US", {
-        dateStyle: "full",
-        timeStyle: "full"
-    });
-    toggleView();
 });
 
 $("#clear_form").click(function () {
@@ -171,10 +156,18 @@ $("#clear_form").click(function () {
 
 $("#cancel_form").click(function () {
     clearForm_1();
-    toggleView();
+    Newpost.classList.remove('active-popup');
 });
 
 $("#logout").click(function () {
     clearForm();
     window.location.href = "lab12/logout";
+});
+
+Popup.addEventListener('click', () => {
+    Newpost.classList.add('active-popup');
+});
+
+Close.addEventListener('click', () => {
+    Newpost.classList.remove('active-popup');
 });
