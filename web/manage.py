@@ -4,7 +4,7 @@ from app import app, db
 from app.models.contact import Contact
 from app.models.BlogEntry import BlogEntry
 from app.models.authuser import AuthUser, PrivateContact
-from app.models.review import review
+from app.models.review import Review
 from app.models.problems import problems
 
 cli = FlaskGroup(app)
@@ -26,7 +26,7 @@ def seed_db():
     db.session.add(
         PrivateContact(firstname='ส้มโอ', lastname='โอเค', phone='081-111-1112', owner_id=1))
     db.session.add(
-        review(name='Tanachoh Vattanashusagul', 
+        Review(name='Tanachoh Vattanashusagul', 
                message='LOL', 
                email='saoraza1234@gmail.com', 
                date='20/2/2566 16:56:47', 
