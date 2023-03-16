@@ -203,8 +203,7 @@ def project_profile():
             if 'file' in request.files:
                 file = request.files['file']
                 if file.filename == '':
-                    flash('No image selected for uploading')
-                    return redirect(url_for('project_profile'))
+                    avatar_url = user.avatar_url
                 if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -212,17 +211,17 @@ def project_profile():
                 if file and not allowed_file(file.filename):
                     flash('Allowed image types are - png, jpg, jpeg, gif')
                     return redirect(url_for('project_profile'))
-            else:
-                avatar_url = user.avatar_url
+                
 
             # if this returns a user, then the email already exists in database
             user = AuthUser.query.filter_by(email=email_old).first()
             if email != user.email:
+                user = AuthUser.query.filter_by(email=email).first()
                 if user:
                     # if a user is found, we want to redirect back to signup
                     # page so user can try again
                     flash('Email address already exists')
-                    return redirect(url_for('lab12_profile'))
+                    return redirect(url_for('project_profile'))
 
             # update User
             user = AuthUser.query.filter_by(email=email_old).first()
@@ -235,13 +234,13 @@ def project_profile():
             user.update(**updatedict)
             
             # update Blog
-            Review = Review.query.filter_by(email=email_old).all()
-            for i in Review:
+            review = Review.query.filter_by(email=email_old).all()
+            for i in review:
                 updatedict_blog = {'name':name , 'message':i.message , 'email':email, 'date':i.date , 'avatar_url':avatar_url }
                 i.update(**updatedict_blog)
 
-            problems = problems.query.filter_by(email=email_old).all()
-            for i in problems:
+            problem = problems.query.filter_by(email=email_old).all()
+            for i in problem:
                 updatedict_blog = {'name':name , 'message':i.message , 'email':email, 'date':i.date , 'avatar_url':avatar_url }
                 i.update(**updatedict_blog)
             #commit
