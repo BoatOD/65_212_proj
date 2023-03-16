@@ -1,7 +1,7 @@
 $(function() {
  
     $('#us2').locationpicker({
-       location: {latitude: 46.15242437752303, longitude: 2.7470703125},   
+       location: {latitude: 18.804651199999999, longitude: 98.95501329999998},   
        radius: 0,
        inputBinding: {
           latitudeInput: $('#lat'),

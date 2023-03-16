@@ -1,4 +1,65 @@
-$("#addForm").submit(function (event) {
+function refreshblog(formData) {
+    $(".item2").remove();
+    var check = document.getElementsByClassName('emp')[0].id;
+    for (let i = 0; i < formData.length; i++) {
+        if (check == formData[i].email) {
+            $("#blogPost").prepend(
+                '<div class="item2" id="' + formData[i].id + '">'+
+                '<div class="content">'+
+                '<div class="card-img">'+
+                '<img decoding="async" src="../static/img/bg.jpeg" alt="">'+
+                '</div>'+
+                '<div class="card-body">'+
+                '<p>' + formData[i].message + '</p>'+
+                '<div class="user">'+
+                '<img decoding="async" src="'+ formData[i].avatar_url +'" alt="">'+
+                '<div class="user-info">'+
+                '<h5>' + formData[i].name + '</h5>'+
+                '<small>' + formData[i].email + '</small>'+
+                '<small id="time">' + formData[i].date + '</small>'+
+                '</div>'+
+                '</div>'+
+                '</div>'+
+                '<div id="edit_remove">' +
+                '<input type="button" class="edit"' + '" value="✏️" onclick="prePopulateForm(' + formData[i].id + ')">' +
+                '<input type="button" class="remove"' + '" value="🗑️" onclick="removeItem(' + formData[i].id + ')">' +
+                '</div>'+
+                '</div>'+
+                '</div>'
+                );
+        } else {
+            $(".blogPost1").prepend(
+                '<div class="item2" id="' + formData[i].id + '">'+
+                '<div class="content">'+
+                '<div class="card-img">'+
+                '<img decoding="async" src="../static/img/bg.jpeg" alt="">'+
+                '</div>'+
+                '<div class="card-body">'+
+                '<p>' + formData[i].message + '</p>'+
+                '<div class="user">'+
+                '<img decoding="async" src="'+ formData[i].avatar_url +'" alt="">'+
+                '<div class="user-info">'+
+                '<h5>' + formData[i].name + '</h5>'+
+                '<small>' + formData[i].email + '</small>'+
+                '<small id="time">' + formData[i].date + '</small>'+
+                '</div>'+
+                '</div>'+
+                '</div>'+
+                '</div>'+
+                '</div>'
+                );
+        }
+    }
+}
+
+
+$(document).ready(function () {
+    (function () {
+        $.getJSON("/review/blog", refreshblog);
+    })();
+});
+
+$("#addNewBlogForm").submit(function (event) {
     // prevent default html form submission action
     event.preventDefault();
 
@@ -12,23 +73,108 @@ $("#addForm").submit(function (event) {
     });
 
     // pack the inputs into a dictionary
-    var formData = {};
-    $(":input").each(function () {
+    var formData = new FormData();
+    $(".addpost").each(function () {
         var key = $(this).attr('name');
         var val = $(this).val();
         if (key != 'submit') {
-            formData[key] = val;
+            formData.append(key,val);
+        }
+    });
+    formData.append("file", document.getElementById('file').files[0]);
+    // make a POST call to the back end w/ a callback to refresh the table
+    $.ajax({
+        url:'/review',
+        type:'post',
+        data:formData,
+        contentType: false,
+        processData: false,
+        success:function(response){
+            refreshblog(response)
+            clearForm_1();
         }
     });
 
-    // make a POST call to the back end w/ a callback to refresh the table
-    $.post('/review/blog', formData, function (blogData) {
-        refreshblog(blogData)
-        clearForm_1();
-    });
-
+    toggleView();
 });
+
+
+function clearForm() {
+    $('#addNewBlogForm')[0].reset();
+    $('#entryid').val('');
+}
 
 function clearForm_1() {
     $('#message').val('');
+    $('#entryid').val('');
+    $('#date').val('');
 }
+
+function prePopulateForm(id) {
+    $('#addNewBlogForm')[0].reset();
+    $.getJSON("/lab11/microblogs", function (data) {
+        console.log(data);
+        var keyToFind = id;
+        for (var i in data) {
+            if (data[i].id == keyToFind) {
+                $('#name').val(data[i].name);
+                $('#message').val(data[i].message);
+                $('#email').val(data[i].email);
+                $('#entryid').val(id);
+                break;
+            }
+        }
+    });
+    toggleView()
+}
+
+function removeItem(id) {
+    if (!confirm("Delete " + '?')) {
+        return false;
+    }
+
+    var url = "lab11/remove_content"
+    var formData = { 'id': id };
+    $.post(url, formData, function (blogData) {
+        refreshblog(blogData);
+    });
+
+    $("#").detach();
+}
+
+function toggleView() {
+    if ($('#blog_display').attr('hidden')) {
+        $('#blog_display').removeAttr('hidden');
+        $('#add-edit').attr('hidden', 'hidden');
+    } else {
+        $('#blog_display').attr('hidden', 'hidden');
+        $('#add-edit').removeAttr('hidden');
+    }
+}
+
+$("#add_blog").click(function () {
+    clearForm_1();
+    var date = new Date();
+    var offset = date.getTimezoneOffset();
+    var offset1 = date.getTime();
+    var timee = offset + offset1;
+    document.getElementById("date").value = date.toLocaleString(timee, "en-US", {
+        dateStyle: "full",
+        timeStyle: "full"
+    });
+    toggleView();
+});
+
+$("#clear_form").click(function () {
+    clearForm();
+});
+
+$("#cancel_form").click(function () {
+    clearForm_1();
+    toggleView();
+});
+
+$("#logout").click(function () {
+    clearForm();
+    window.location.href = "lab12/logout";
+});

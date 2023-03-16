@@ -19,7 +19,7 @@ from app.models.contact import Contact
 from app.models.authuser import AuthUser, PrivateContact
 from app.models.BlogEntry import BlogEntry
 from app.models.problems import problems
-from app.models.review import review
+from app.models.review import Review
 
 from app import oauth
 
@@ -387,7 +387,7 @@ def lab12_logout():
 
 @app.route('/project/home')
 def project_home():
-   maps = review.query.all()
+   maps = Review.query.all()
    return render_template('project_flask/index.html',maps=maps)
 
 @app.route('/project/login', methods=('GET', 'POST'))
@@ -570,71 +570,26 @@ def project_profile():
 @app.route('/display/<filename>')
 @login_required
 def display_image(filename):
-    if current_user.avatar_url[:5] == 'https':
-        return redirect(url_for('static', filename='uploads/' + filename), code=301)
+    if current_user.avatar_url[0:4] == 'https':
+        return current_user.avatar_url
     else:
         return redirect(url_for('static', filename='uploads/' + filename), code=301)
 
-@app.route('/google')
-def google():
-
-
-    oauth.register(
-        name='google',
-        client_id=app.config['GOOGLE_CLIENT_ID'],
-        client_secret=app.config['GOOGLE_CLIENT_SECRET'],
-        server_metadata_url=app.config['GOOGLE_DISCOVERY_URL'],
-        client_kwargs={
-            'scope': 'openid email profile'
-        }
-    )
-
-
-   # Redirect to google_auth function
-    redirect_uri = url_for('google_auth', _external=True)
-    return oauth.google.authorize_redirect(redirect_uri)
-
-@app.route('/google/auth/')
-def google_auth():
-    token = oauth.google.authorize_access_token()
-    app.logger.debug(str(token))
-
-
-    userinfo = token['userinfo']
-    app.logger.debug(" Google User " + str(userinfo))
-    email = userinfo['email']
-    user = AuthUser.query.filter_by(email=email).first()
-
-
-    if not user:
-        name = userinfo['given_name'] + " " + userinfo['family_name']
-        random_pass_len = 8
-        password = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
-                          for i in range(random_pass_len))
-        picture = userinfo['picture']
-        new_user = AuthUser(email=email, name=name,
-                           password=generate_password_hash(
-                               password, method='sha256'),
-                           avatar_url=picture)
-        db.session.add(new_user)
-        db.session.commit()
-        user = AuthUser.query.filter_by(email=email).first()
-    login_user(user)
-    return redirect('/project/home') 
-
-
-if __name__ == "__main__":  #and the final closing function
-    app.run(debug=True)
-
 @app.route('/project/review', methods=('GET', 'POST'))
+def projectreviews():
+    posts = Review.query.all()
+    return render_template('project_flask/review.html', posts=posts)
+
+@app.route('/review', methods=('GET', 'POST'))
 def reviews():
     if request.method == 'POST':
         result = request.form.to_dict()
         app.logger.debug(str(result))
         id_ = result.get('id', '')
+        picname = ''
         validated = True
         validated_dict = dict()
-        valid_keys = ['message']
+        valid_keys = ['name', 'message', 'email', 'date', 'avatar_url', 'lat', 'lng']
 
 
         # validate the input
@@ -651,31 +606,40 @@ def reviews():
                 break
             validated_dict[key] = value
 
+        if 'file' in request.files:
+            app.logger.debug('work')
+            file = request.files['file']
+            if file.filename == '':
+                flash('No image selected for uploading')
+                return redirect(url_for('reviews'))
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                validated_dict['picname'] = file.filename
+            if file and not allowed_file(file.filename):
+                flash('Allowed image types are - png, jpg, jpeg, gif')
+                return redirect(url_for('reviews'))
 
         if validated:
             app.logger.debug('validated dict: ' + str(validated_dict))
-            # if there is no id: create a new contact entry
+            # if there is no id: create a new contact entry.
             if not id_:
-                entry = review(**validated_dict)
+                entry = Review(**validated_dict)
                 app.logger.debug(str(entry))
                 db.session.add(entry)
             # if there is an id already: update the contact entry
             else:
-                contact = review.query.get(id_)
-                contact.update(**validated_dict)
-
-
+                review = Review.query.get(id_)
+                if review.email == current_user.email:
+                    review.update(**validated_dict)
             db.session.commit()
-
-
         return review_content()
-
-    return render_template('project_flask/review.html')
+    return redirect(url_for("projectreviews"))
 
 @app.route("/review/blog")
 def review_content():
     microblogs = []
-    db_microblogs = review.query.all()
+    db_microblogs = Review.query.all()
 
     microblogs = list(map(lambda x: x.to_dict(), db_microblogs))
     app.logger.debug("DB microblogs: " + str(microblogs))
@@ -738,3 +702,54 @@ def problems_content():
     app.logger.debug("DB microblogs: " + str(microblogs))
 
     return jsonify(microblogs)
+
+@app.route('/google')
+def google():
+
+
+    oauth.register(
+        name='google',
+        client_id=app.config['GOOGLE_CLIENT_ID'],
+        client_secret=app.config['GOOGLE_CLIENT_SECRET'],
+        server_metadata_url=app.config['GOOGLE_DISCOVERY_URL'],
+        client_kwargs={
+            'scope': 'openid email profile'
+        }
+    )
+
+
+   # Redirect to google_auth function
+    redirect_uri = url_for('google_auth', _external=True)
+    return oauth.google.authorize_redirect(redirect_uri)
+
+@app.route('/google/auth/')
+def google_auth():
+    token = oauth.google.authorize_access_token()
+    app.logger.debug(str(token))
+
+
+    userinfo = token['userinfo']
+    app.logger.debug(" Google User " + str(userinfo))
+    email = userinfo['email']
+    user = AuthUser.query.filter_by(email=email).first()
+
+
+    if not user:
+        name = userinfo['given_name'] + " " + userinfo['family_name']
+        random_pass_len = 8
+        password = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
+                          for i in range(random_pass_len))
+        picture = userinfo['picture']
+        new_user = AuthUser(email=email, name=name,
+                           password=generate_password_hash(
+                               password, method='sha256'),
+                           avatar_url=picture)
+        db.session.add(new_user)
+        db.session.commit()
+        user = AuthUser.query.filter_by(email=email).first()
+    login_user(user)
+    return redirect('/project/home') 
+
+
+if __name__ == "__main__":  #and the final closing function
+    app.run(debug=True)

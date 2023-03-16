@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500&display=swap');
+
 * {
     padding: 0;
     margin: 0;
     text-decoration: none;
     list-style: none;
     box-sizing: border-box;
+    font-family: 'poppins' ,'sans-serif';
 }
 .bgimage{
     
@@ -13,7 +16,7 @@
 
 body {
     font-family: 'montserrat', sans-serif;
-    background: url('../img/sky-stars.png'),linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
+    background: linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
     height: 100%;
     background-size: contain;
     background-position: bottom;
@@ -21,13 +24,13 @@ body {
 }
 .Newpost{
     display: flex;
-    margin-top: 60px;
+    margin-top: 140px;
     margin-bottom: 60px;
     align-items: center;
     justify-content: center;
-    
 }
-.item1{
+
+.add-edit{
     display: block;
     box-sizing: border-box;
     width: 40%;
@@ -38,11 +41,10 @@ body {
     border-radius: 10px;
     padding: 16px;
 }
-input[type=text],
-input[type=email],
-
-select,
-textarea {
+.Newpost input[type=text],
+.Newpost input[type=email],
+.Newpost select,
+.Newpost textarea {
     width: 100%;
     padding: 5px;
     border: 1px solid #ccc;
@@ -54,12 +56,12 @@ textarea {
 }
 
 
-label {
+.Newpost label {
     display: block;
     font: 1rem 'Fira Sans', sans-serif;
 }
-input,
-label {
+.Newpost input,
+.Newpost label {
     margin: 0.4rem 0;
 }
 #picture{

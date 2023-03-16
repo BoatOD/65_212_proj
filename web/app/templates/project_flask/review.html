@@ -1,45 +1,51 @@
 {% extends "project_flask/base.html" %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>login1</title>
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-<!--add CSS HERE-->
-<link rel="stylesheet" href="" /><!--add CSS HERE-->
-<!--add CSS HERE-->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAF8gNw7piHZpeLTu5UzZgkvMxsJpEybY0&sensor=false&libraries=places&signature=C-qIw8qLTHPAr_Mb_Bb7tFoiTFE="></script>
-    <script type="text/javascript" src="https://rawgit.com/Logicify/jquery-locationpicker-plugin/master/dist/locationpicker.jquery.js"></script>
-    <script src="../../static/js/map.js"></script>
-</head>
-
-<body>
-    <section>
-        <div class="form-box">
-            <div class="form-value">
-                <form id="addForm" action="">
-                    <h2>review the place</h2>
-                    <div class="Problembox">
-                        <label for="">review</label>
-                        <input type="text" id="message" required/>
-                    </div>
-                    
-                    
-                </form>
-                <div id="us2" style="width: 500px; height: 400px;"></div>
-                <input type="submit" name="submit" value="confirm">
-            </div>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAF8gNw7piHZpeLTu5UzZgkvMxsJpEybY0&sensor=false&region=TH&language=TH&libraries=places&signature=C-qIw8qLTHPAr_Mb_Bb7tFoiTFE="></script>
+<script type="text/javascript"
+    src="https://rawgit.com/Logicify/jquery-locationpicker-plugin/master/dist/locationpicker.jquery.js"></script>
+<link rel="stylesheet" href="../../static/css/review.css">
+<script src="../../static/js/map.js"></script>
+{% if current_user.is_authenticated %}
+<div class="Newpost">
+    <div class="add-edit">
+        <div class="post">
+            <form id="addNewBlogForm">
+                <label for="message">Message</label>
+                <textarea class="addpost" id="message" name="message" placeholder="Type your reviews..."
+                    required></textarea>
+                <input class="addpost" type="hidden" id="entryid" name="id" value="">
+                <input class="addpost" type="hidden" id="name" name="name" value="{{ current_user.name }}">
+                <input class="addpost" type="hidden" id="email" name="email" value="{{ current_user.email }}">
+                <label for="picture">Choose a picture</label>
+                <input type="file" id="file" name="file">
+                <br>
+                <input type="text" id="location" style="width: 200px" />
+                <div id="us2" style="width: 100%; height: 400px;"></div>
+                <input class="addpost" type="hidden" id="lng" name="lng" style="width: 200px" />
+                <input class="addpost" type="hidden" id="lat" name="lat" style="width: 200px" />
+                <input class="addpost" type="hidden" id="avatar_url" name="avatar_url"
+                    value="{{ current_user.avatar_url }}">
+                <input class="addpost" type="hidden" id="date" name="date" value="">
+                <br>
+                <input class="button-form" id="submit" type="submit" name="submit" value="Submit">
+                <button class="button-form" id="clear_form" type="button">Clear</button>
+                <button class="button-form" id="cancel_form" type="button">Cancel</button>
+            </form>
         </div>
-    </section>
-    <script src="/js/login1.js"></script>
-</body>
+    </div>
+</div>
+<div id="blog_display">
+    <button class="textt" id="add_blog" type="button">Tweet</button>
+</div>
+{% endif %}
+<div class="blogPost" id="blogPost">
+
+</div>
+<div class="emp" id="{{ current_user.email }}" hidden="hidden">
+</div>
+<script src="../../static/js/text.js"></script>
 <script src="../../static/js/review.js"></script>
-</html>
 {% endblock %}
