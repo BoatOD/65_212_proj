@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100;200;300;400;500&family=Poppins:wght@100;200;300;400;500&display=swap');
 
 * {
     padding: 0;
@@ -6,34 +6,79 @@
     text-decoration: none;
     list-style: none;
     box-sizing: border-box;
-    font-family: 'poppins' ,'sans-serif';
-}
-.bgimage{
-    
-    width: 100%;
-    height: 100vh;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 body {
-    font-family: 'montserrat', sans-serif;
+    font-family: 'Noto Sans Thai', sans-serif;
     background: linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
-    height: 100%;
-    background-size: contain;
-    background-position: bottom;
-    background-repeat: no-repeat;
 }
-.Newpost{
+
+#title{
+    margin-top: 350px;
     display: flex;
-    margin-top: 140px;
-    margin-bottom: 60px;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    overflow: hidden;
+}
+
+#Texttitle{
+    font-size: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #fff;
+    border-right: 4px solid #fff;
+    animation: typing 8s linear infinite;
+}
+
+@keyframes typing{
+    0% {
+        width: 0ch;
+    }
+    50% {
+        width: 28ch;
+    }
+    100% {
+        width: 0ch;
+    }
+}
+
+.New{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Newpost{
+    position: fixed;
+    width: 650px;
+    height: 800px;
+    top: 10%;
+    z-index: 100;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: height 0.2s ease;
+    transform: scale(0);
+    transition: transform 0.5s ease, height 0.2s ease;
+}
+
+.Newpost.active-popup{
+    transform: scale(1);
 }
 
 .add-edit{
     display: block;
     box-sizing: border-box;
-    width: 40%;
+    width: 600px;
 }
 .post{
     box-shadow: 0 3px 25px rgba(255, 255, 255, 0.447);
@@ -41,8 +86,13 @@ body {
     border-radius: 10px;
     padding: 16px;
 }
-.Newpost input[type=text],
-.Newpost input[type=email],
+
+#blog_display{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
 .Newpost select,
 .Newpost textarea {
     width: 100%;
@@ -51,14 +101,14 @@ body {
     border-radius: 8px;
     box-sizing: border-box;
     margin-top: 6px;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     resize: vertical;
 }
 
 
 .Newpost label {
     display: block;
-    font: 1rem 'Fira Sans', sans-serif;
+    font: 1rem;
 }
 .Newpost input,
 .Newpost label {
@@ -116,7 +166,8 @@ body {
     flex-direction: row;
     flex-wrap: wrap;    
     border-radius: 10px;
-    
+    width: 100%;
+    margin-top: 8%;
 }
 
 .item2{
@@ -138,8 +189,8 @@ body {
     
 }
 .card-img img{
-    max-width: 100%;
-    height: auto;
+    width: 100%;
+    max-height: 500px;
     border-radius: 4px;
     object-fit: cover;
 
@@ -174,4 +225,14 @@ body {
 }
 #time{
     color: #8d909a;
+}
+
+.edit,.remove{
+    margin-left: 10px;
+    background: linear-gradient(rgba(247, 0, 255, 0.431),rgba(111, 0, 255, 0.431));
+    border: none;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
 }

@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'poppins' ,'sans-serif';
+}
+
+body{
+    min-height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),url('../img/angk.jpeg');
+    background-size: cover;
+    background-position: center;
+}
+
+.profilee{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: fixed;
+    width: 50%;
+    height: 700px;
+    top: 15%;
+    left: 25%;
+    z-index: 100;
+    background: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: height 0.2s ease;
+    transition: transform 0.5s ease, height 0.2s ease;
+}
+
+.form-box img{
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+input#file-input{
+    display: none;
+}
+
+#input-file{
+    width: 300px;
+    height: 50px;
+}
+
+input#file-input + label{
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#file-nameee{
+    margin-left: 15px;
+}
+
+.img-user{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

@@ -12,9 +12,6 @@ body{
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url(/pic/cmu.jpg) no-repeat;
-    background-size: cover;
-    background-position: center;
 }
 
 header{
@@ -30,9 +27,8 @@ header{
     background: #162938;
 }
 
-.logo{
-    font-size: 2em;
-    color: #fff;
+#logo{
+    height: 50px;
     user-select: none;
 }
 
@@ -107,7 +103,7 @@ header{
 .wrapper{
     position: fixed;
     width: 400px;
-    height: 440px;
+    height: 480px;
     top: 30%;
     z-index: 100;
     background: transparent;
@@ -165,9 +161,9 @@ header{
     right: 0;
     width: 45px;
     height: 45px;
-    background: black;
+    background: #fff;
     font-size: 2em;
-    color: #fff;
+    color: #000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -178,7 +174,7 @@ header{
 
 .form-box h2{
     font-size: 2em;
-    color: black;
+    color: linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
     text-align: center;
 }
 
@@ -186,7 +182,7 @@ header{
     position: relative;
     width: 100%;
     height: 50px;
-    border-bottom: 2px solid #162938;
+    border-bottom: 2px solid black;
     margin: 30px 0;
 }
 
@@ -196,7 +192,7 @@ header{
     left: 5px;
     transform: translateY(-50%);
     font-size: 1em;
-    color: black;
+    color: linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
     font-weight: 500;
     pointer-events: none;
     transition: 0.4s;
@@ -209,7 +205,7 @@ header{
     border: none;
     outline: none;
     font-size: 1em;
-    color: black;
+    color: linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
     font-weight: 600;
     padding: 0 35px 0 5px;
 }
@@ -223,7 +219,7 @@ header{
     position: absolute;
     right: 8px;
     font-size: 1.2em;
-    color: black;
+    color: linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
     line-height: 57px;
 
 }
@@ -231,7 +227,7 @@ header{
 .btn{
     width: 100%;
     height: 45px;
-    background: black;
+    background: linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
     border: none;
     outline: none;
     border-radius: 6px;
@@ -243,14 +239,14 @@ header{
 
 .login-register{
     font-size: 0.9em;
-    color: black;
+    color: linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
     text-align: center;
     font-weight: 500;
     margin: 25px 0 10px;
 }
 
 .login-register p a {
-    color: black;
+    color: linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
     text-decoration: none;
     font-weight: 600;
 }
@@ -260,6 +256,18 @@ header{
 }
 
 .wrapper .SSO-login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 2.5em;
-    margin: 10px;
+    margin-top: 15px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(rgba(208, 0, 255, 0.55), rgba(0, 13, 255, 0.55));
+    border-radius: 20px;
+    padding-top: 12px;
+}
+
+#content{
+    width: 100%;
 }
