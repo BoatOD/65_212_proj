@@ -164,6 +164,7 @@ def project_profile():
         app.logger.debug(str(result))
         password = result.get('password', '')
         avatar_url = ''
+        picname = '0'
         validated = True
         validated_dict = {}
         valid_keys = ['email', 'name' , 'email_old']
@@ -211,6 +212,8 @@ def project_profile():
                 if file and not allowed_file(file.filename):
                     flash('Allowed image types are - png, jpg, jpeg, gif')
                     return redirect(url_for('project_profile'))
+            else:
+                avatar_url = user.avatar_url
 
             # if this returns a user, then the email already exists in database
             user = AuthUser.query.filter_by(email=email_old).first()
@@ -226,14 +229,19 @@ def project_profile():
             app.logger.debug("preparing to add")
             
             if 'file' not in request.files:
-                avatar_url = gen_avatar_url(email, name)
+                avatar_url = user.avatar_url
             
             updatedict = {'email':email , 'name':name , 'avatar_url':avatar_url}
             user.update(**updatedict)
             
             # update Blog
-            blogentry = BlogEntry.query.filter_by(email=email_old).all()
-            for i in blogentry:
+            Review = Review.query.filter_by(email=email_old).all()
+            for i in Review:
+                updatedict_blog = {'name':name , 'message':i.message , 'email':email, 'date':i.date , 'avatar_url':avatar_url }
+                i.update(**updatedict_blog)
+
+            problems = problems.query.filter_by(email=email_old).all()
+            for i in problems:
                 updatedict_blog = {'name':name , 'message':i.message , 'email':email, 'date':i.date , 'avatar_url':avatar_url }
                 i.update(**updatedict_blog)
             #commit
