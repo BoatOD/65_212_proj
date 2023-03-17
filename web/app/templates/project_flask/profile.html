@@ -9,7 +9,7 @@
   <div class="">
     <div class="form-box">
       <div class="img-user">
-        <img src="{{ url_for('display_image', filename=current_user.avatar_url) }}">
+        <img id="Profilee" src="{{ url_for('display_image', filename=current_user.avatar_url) }}">
       </div>
       <form method="POST" enctype="multipart/form-data">
         <div id="email-name">
@@ -42,7 +42,7 @@
           </div>
           <div class="field">
             <div class="control">
-              
+
             </div>
           </div>
           <button class="button is-block is-info is-large is-fullwidth btn">Change Profile</button>
@@ -54,7 +54,7 @@
 <script>
   let inputfile = document.getElementById('file-input');
   let fileNameField = document.getElementById('file-name')
-  inputfile.addEventListener('change', function(event){
+  inputfile.addEventListener('change', function (event) {
     let uploadedFileName = event.target.files[0].name;
     fileNameField.textContent = uploadedFileName;
   });
@@ -68,6 +68,12 @@
       $('#email-name').removeAttr('hidden');
     }
   }
+  $(document).ready(function () {
+    var x = '{{ current_user.avatar_url }}'
+    if ( x.slice(0, 5) == 'https' ){
+      $('#Profilee').attr("src","{{ current_user.avatar_url }}")
+    }
+  });
 
 </script>
 {% endblock %}

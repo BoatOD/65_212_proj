@@ -38,7 +38,28 @@ body {
         width: 0ch;
     }
     50% {
-        width: 19ch;
+        width: 15ch;
+    }
+    100% {
+        width: 0ch;
+    }
+}
+
+#Texttitleee{
+    font-size: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #fff;
+    border-right: 4px solid #fff;
+    animation: typingg 5s linear infinite;
+}
+
+@keyframes typingg{
+    0% {
+        width: 0ch;
+    }
+    50% {
+        width: 23ch;
     }
     100% {
         width: 0ch;

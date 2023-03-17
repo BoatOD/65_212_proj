@@ -7,7 +7,7 @@
 <script type="text/javascript"
     src="https://rawgit.com/Logicify/jquery-locationpicker-plugin/master/dist/locationpicker.jquery.js"></script>
 <link rel="stylesheet" href="../../static/css/review.css">
-<script src="../../static/js/map.js"></script>
+
 {% if current_user.is_authenticated %}
 <div id="title">
     <div id="Texttitle">
@@ -47,6 +47,12 @@
 <div id="blog_display">
     <button class="textt button-form" id="add_blog" type="button">Tweet</button>
 </div>
+{% else %}
+<div id="title">
+    <div id="Texttitleee">
+        <span>Login to share your experience with others.</span>
+    </div>
+</div>
 {% endif %}
 <div class="blogPost" id="blogPost">
 
@@ -59,58 +65,83 @@
     const Popup = document.querySelector('#blog_display');
     const Close = document.querySelector('.cclose');
 
+    $(function () {
+
+        $('#us2').locationpicker({
+            location: { latitude: 18.804651199999999, longitude: 98.95501329999998 },
+            radius: 0,
+            inputBinding: {
+                latitudeInput: $('#lat'),
+                longitudeInput: $('#lng'),
+                locationNameInput: $('#location')
+            },
+            enableAutocomplete: true,
+            onchanged: function (currentLocation, radius, isMarkerDropped) {
+                alert("Location changed. New location (" + currentLocation.latitude + ", " + currentLocation.longitude + ")");
+            }
+        });
+    });
+
     function refreshblog(formData) {
         $(".item2").remove();
         var check = document.getElementsByClassName('emp')[0].id;
         for (let i = 0; i < formData.length; i++) {
             if (check == formData[i].email) {
+                var x = '<img decoding="async" src="../../static/uploads/' + formData[i].avatar_url + '" alt="">'
+                if (formData[i].avatar_url.slice(0, 5) == 'https'){
+                    x = '<img decoding="async" src="'+ formData[i].avatar_url +'" alt="">'
+                }
                 $("#blogPost").prepend(
                     '<div class="item2" id="' + formData[i].id + '">' +
-                        '<div class="content">' +
-                            '<div class="card-img">' +
-                                '<img decoding="async" src="../../static/uploads/' + formData[i].picname + '" alt="">' +
-                            '</div>' +
-                            '<div class="card-body">' +
-                                '<p>' + formData[i].message + '</p>' +
-                                '<div class="user">' +
-                                    '<img decoding="async" src="{{ url_for("display_image", filename=current_user.avatar_url) }}" alt="">' +
-                                    '<div class="user-info">' +
-                                        '<h5>' + formData[i].name + '</h5>' +
-                                        '<small>' + formData[i].email + '</small>' +
-                                        '<small id="time">' + formData[i].date + '</small>' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div id="edit_remove">' +
-                                '<input type="button" class="edit"' + '" value="✏️" onclick="prePopulateForm(' + formData[i].id + ')">' +
-                                '<input type="button" class="remove"' + '" value="🗑️" onclick="removeItem(' + formData[i].id + ')">' +
-                                '<a href="https://www.google.com/maps/search/?api=1&query=' + formData[i].lat + '%2C' + formData[i].lng + '"><input type="button" class="remove"' + '" value="🌍"></a>' +
-                            '</div>' +
-                        '</div>' +
+                    '<div class="content">' +
+                    '<div class="card-img">' +
+                    '<img decoding="async" src="../../static/uploads/' + formData[i].picname + '" alt="">' +
+                    '</div>' +
+                    '<div class="card-body">' +
+                    '<p>' + formData[i].message + '</p>' +
+                    '<div class="user">' +
+                    x +
+                    '<div class="user-info">' +
+                    '<h5>' + formData[i].name + '</h5>' +
+                    '<small>' + formData[i].email + '</small>' +
+                    '<small id="time">' + formData[i].date + '</small>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div id="edit_remove">' +
+                    '<input type="button" class="edit"' + '" value="✏️" onclick="prePopulateForm(' + formData[i].id + ')">' +
+                    '<input type="button" class="remove"' + '" value="🗑️" onclick="removeItem(' + formData[i].id + ')">' +
+                    '<a href="https://www.google.com/maps/search/?api=1&query=' + formData[i].lat + '%2C' + formData[i].lng + '"><input type="button" class="remove"' + '" value="🌍"></a>' +
+                    '</div>' +
+                    '</div>' +
                     '</div>'
                 );
             } else {
+                var x = '<img decoding="async" src="../../static/uploads/' + formData[i].avatar_url + '" alt="">'
+                if (formData[i].avatar_url.slice(0, 5) == 'https'){
+                    x = '<img decoding="async" src="'+ formData[i].avatar_url +'" alt="">'
+                }
                 $("#blogPost").prepend(
                     '<div class="item2" id="' + formData[i].id + '">' +
-                        '<div class="content">' +
-                            '<div class="card-img">' +
-                                '<img decoding="async" src="../../static/uploads/' + formData[i].picname + '" alt="">' +
-                            '</div>' +
-                            '<div class="card-body">' +
-                                '<p>' + formData[i].message + '</p>' +
-                                '<div class="user">' +
-                                    '<img decoding="async" src="' + formData[i].avatar_url + '" alt="">' +
-                                    '<div class="user-info">' +
-                                        '<h5>' + formData[i].name + '</h5>' +
-                                        '<small>' + formData[i].email + '</small>' +
-                                        '<small id="time">' + formData[i].date + '</small>' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div id="edit_remove">' +
-                                '<a href="https://www.google.com/maps/search/?api=1&query=' + formData[i].lat + '%2C' + formData[i].lng + '"><input type="button" class="remove"' + '" value="🌍"></a>' +
-                            '</div>' +
-                        '</div>' +
+                    '<div class="content">' +
+                    '<div class="card-img">' +
+                    '<img decoding="async" src="../../static/uploads/' + formData[i].picname + '" alt="">' +
+                    '</div>' +
+                    '<div class="card-body">' +
+                    '<p>' + formData[i].message + '</p>' +
+                    '<div class="user">' +
+                    x +
+                    '<div class="user-info">' +
+                    '<h5>' + formData[i].name + '</h5>' +
+                    '<small>' + formData[i].email + '</small>' +
+                    '<small id="time">' + formData[i].date + '</small>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div id="edit_remove">' +
+                    '<a href="https://www.google.com/maps/search/?api=1&query=' + formData[i].lat + '%2C' + formData[i].lng + '"><input type="button" class="remove"' + '" value="🌍"></a>' +
+                    '</div>' +
+                    '</div>' +
                     '</div>'
                 );
             }
@@ -187,6 +218,16 @@
                     $('#message').val(data[i].message);
                     $('#email').val(data[i].email);
                     $('#entryid').val(id);
+                    $('#us2').locationpicker({
+                        location: { latitude: data[i].lat, longitude: data[i].lng },
+                        radius: 0,
+                        inputBinding: {
+                            latitudeInput: $('#lat'),
+                            longitudeInput: $('#lng'),
+                            locationNameInput: $('#location')
+                        },
+                        enableAutocomplete: true
+                    });
                     break;
                 }
             }

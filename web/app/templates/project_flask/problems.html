@@ -11,7 +11,7 @@
 {% if current_user.is_authenticated %}
 <div id="title">
     <div id="Texttitle">
-        <span>Report your problem.</span>
+        <span>Report your issue.</span>
     </div>
 </div>
 <div class="New">
@@ -46,6 +46,12 @@
 </div>
 <div id="blog_display">
     <button class="textt button-form" id="add_blog" type="button">Tweet</button>
+</div>
+{% else %}
+<div id="title">
+    <div id="Texttitleee">
+        <span>Login to report your issue.</span>
+    </div>
 </div>
 {% endif %}
 <div class="blogPost" id="blogPost">
